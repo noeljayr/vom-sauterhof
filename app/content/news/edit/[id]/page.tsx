@@ -1,0 +1,263 @@
+"use client";
+
+import RichTextEditor from "@/components/editor/RichTextEditor";
+import { IconArrowLeft, IconPhotoPlus, IconX } from "@tabler/icons-react";
+import Link from "next/link";
+import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
+import { useRouter, useParams } from "next/navigation";
+
+function Page() {
+  const [coverImage, setCoverImage] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
+
+  useEffect(() => {
+    if (id) {
+      fetchNews();
+    }
+  }, [id]);
+
+  const fetchNews = async () => {
+    try {
+      const response = await fetch(`/api/news/get?id=${id}`);
+      const data = await response.json();
+
+      if (data.success) {
+        setTitle(data.news.title);
+        setContent(data.news.content);
+        setCoverImage(data.news.coverImage || null);
+      } else {
+        alert(data.message || "Failed to fetch news");
+        router.push("/content/news");
+      }
+    } catch (error) {
+      console.error("Error fetching news:", error);
+      alert("An error occurred while fetching news");
+      router.push("/content/news");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleImageUpload = (file: File) => {
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setCoverImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleRemoveImage = () => {
+    setCoverImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const validate = () => {
+    if (!content.trim() || !title.trim()) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleSubmit = async (status: "draft" | "published") => {
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/news/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          title,
+          content,
+          coverImage: coverImage || "",
+          status,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        router.push("/content/news");
+      } else {
+        alert(data.message || "Failed to update news");
+      }
+    } catch (error) {
+      console.error("Error updating news:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-[65ch] mx-auto">
+        <div className="text-center py-8">Loading...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-[65ch] mx-auto">
+      <div className=" flex flex-col self-center w-full gap-4">
+        <div className="flex items-center pb-2 border-b border-b-black/10">
+          <Link
+            href={"/content/news"}
+            type="button"
+            style={{
+              transition: "ease 0.5s",
+              fontSize: "calc(var(--p4) * 0.9)",
+            }}
+            className={`py-1 flex items-center px-2 bg-white hover:brightness-95 font-medium border border-[var(--c-border)]  rounded-[0.35rem] cursor-pointer`}
+          >
+            <IconArrowLeft className="h-4 w-4" />
+            Back
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => handleSubmit("draft")}
+            disabled={isSubmitting || !validate() || !coverImage}
+            style={{
+              transition: "ease 0.5s",
+              fontSize: "calc(var(--p4) * 0.9)",
+            }}
+            className="draft ml-auto py-1 px-2 hover:brightness-95 font-medium rounded-[0.35rem] cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+          >
+            
+            Save as draft
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSubmit("published")}
+            disabled={isSubmitting || !validate() || !coverImage}
+            style={{
+              transition: "ease 0.5s",
+              fontSize: "calc(var(--p4) * 0.9)",
+            }}
+            className={`py-1 px-2 bg-[#F38D3B] hover:brightness-95 font-medium border border-[var(--c-border)]  rounded-[0.35rem] cursor-pointer text-white ml-3 disabled:opacity-50 disabled:pointer-events-none`}
+          >
+            Update
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <div
+            className={`relative flex flex-col items-center justify-center border ${
+              isDragging ? "border-[#F38D3B] bg-[#F38D3B]/5" : "border-black/10"
+            } ${
+              coverImage ? "h-fit border-0" : "h-[20rem]"
+            } border-dashed rounded-[0.5rem] w-full cursor-pointer transition-all hover:border-[#F38D3B]/50 overflow-hidden`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onClick={handleClick}
+          >
+            {coverImage ? (
+              <>
+                <img
+                  src={
+                    coverImage.startsWith("data:")
+                      ? coverImage
+                      : `/news/${coverImage}`
+                  }
+                  alt="Cover"
+                 className="h-fit w-full"
+                />
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveImage();
+                  }}
+                  className="absolute top-2 right-2 p-1.5 bg-white/90 hover:bg-white rounded-full shadow-md transition-all z-10"
+                >
+                  <IconX className="h-4 w-4" />
+                </button>
+              </>
+            ) : (
+              <>
+                <IconPhotoPlus className="h-5 w-5 opacity-55" />
+                <span
+                  style={{
+                    transition: "ease 0.5s",
+                    fontSize: "calc(var(--p4) * 0.7)",
+                  }}
+                  className="font-medium opacity-50"
+                >
+                  {isDragging
+                    ? "Drop image here"
+                    : "Click or drag to upload cover image"}
+                </span>
+              </>
+            )}
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileInputChange}
+            className="hidden"
+          />
+
+          <input
+            className="font-h3 font-bold placeholder:opacity-50 outline-0 border-0 bg-transparent"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+
+        <RichTextEditor value={content} onChange={setContent} />
+      </div>
+    </div>
+  );
+}
+
+export default Page;
