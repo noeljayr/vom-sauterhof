@@ -3,6 +3,8 @@ import Home from "@/components/pages/Home";
 import clientPromise from "@/lib/mongodb";
 import { HomepageContent } from "@/types/homepage";
 
+export const revalidate = 0;
+
 async function Page() {
   const client = await clientPromise;
   const db = client.db("vom_sauterhof");

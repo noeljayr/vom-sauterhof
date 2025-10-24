@@ -64,7 +64,7 @@ export function Footer({ content }: Props) {
           <div className="space-y-6 md:space-y-5 text-[#141414]">
             <div>
               <h3 className="font-bold mb-5 text-xl md:text-base">
-                {content.companyName || "Familie Sauter"}
+                {content.companyName}
               </h3>
               <p className="mb-3 text-base md:text-base leading-relaxed">
                 {content.address1 || "Mühlerain 873"}

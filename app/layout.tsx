@@ -30,6 +30,8 @@ export const metadata: Metadata = {
     "Wir haben eine kleine familiäre Beauceronzucht und züchten mit Leidenschaft und Herzblut  Beauceron mit FCI-Papieren. ",
 };
 
+export const revalidate = 0;
+
 export default async function RootLayout({
   children,
 }: Readonly<{

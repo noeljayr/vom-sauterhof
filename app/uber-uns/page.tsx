@@ -3,6 +3,8 @@ import clientPromise from "@/lib/mongodb";
 import { AboutContent } from "@/types/about";
 import AboutUsClient from "@/components/pages/AboutUsClient";
 
+export const revalidate = 0;
+
 async function Page() {
   const client = await clientPromise;
   const db = client.db("vom_sauterhof");
