@@ -55,9 +55,9 @@ async function Page() {
     : {};
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <>
       <Home content={content} news={news} />
-    </Suspense>
+    </>
   );
 }
 
