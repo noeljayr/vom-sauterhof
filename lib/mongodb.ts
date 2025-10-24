@@ -1,16 +1,17 @@
 import { MongoClient } from "mongodb";
 
-if (!process.env.MONGODB_URI) {
-  throw new Error("Please define MONGODB_URI in your .env.local");
-}
-
 const uri = process.env.MONGODB_URI;
-
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-if (process.env.NODE_ENV === "development") {
+if (!uri) {
+  // During build time, MONGODB_URI might not be available
+  // Create a dummy promise that will fail at runtime if actually used
+  clientPromise = Promise.reject(
+    new Error("Please define MONGODB_URI in your environment variables")
+  );
+} else if (process.env.NODE_ENV === "development") {
   // In development, use a global variable to preserve the client across HMR
   if (!(global as any)._mongoClientPromise) {
     client = new MongoClient(uri);
