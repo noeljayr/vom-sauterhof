@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Home from "@/components/pages/Home";
 import clientPromise from "@/lib/mongodb";
 import { HomepageContent } from "@/types/homepage";
@@ -55,9 +55,9 @@ async function Page() {
     : {};
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <Home content={content} news={news} />
-    </>
+    </Suspense>
   );
 }
 

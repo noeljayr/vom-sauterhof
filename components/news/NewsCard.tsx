@@ -15,6 +15,11 @@ type Props = {
 function NewsCard({ news, color }: Props) {
   // Strip HTML tags from content
   const stripHtml = (html: string) => {
+    if (typeof window === "undefined") {
+      // Server-side: use regex to strip HTML tags
+      return html.replace(/<[^>]*>/g, "");
+    }
+    // Client-side: use DOM API
     const tmp = document.createElement("div");
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText || "";

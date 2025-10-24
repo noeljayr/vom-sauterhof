@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "@/css/globals.css";
 import { Navbar } from "@/components/Navbar";
 import { FooterClient } from "@/components/FooterClient";
@@ -79,10 +80,14 @@ export default async function RootLayout({
         className={`min-h-screen antialiased bg-[#F9ECE1] overflow-x-hidden`}
       >
         <AuthInitializer />
-        <Mode />
+        <Suspense fallback={null}>
+          <Mode />
+        </Suspense>
         <Navbar content={navbarContent} />
         {children}
-        <FooterClient content={footerContent} />
+        <Suspense fallback={null}>
+          <FooterClient content={footerContent} />
+        </Suspense>
       </body>
     </html>
   );

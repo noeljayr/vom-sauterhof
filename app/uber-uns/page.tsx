@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import clientPromise from "@/lib/mongodb";
 import { AboutContent } from "@/types/about";
 import AboutUsClient from "@/components/pages/AboutUsClient";
@@ -24,7 +25,11 @@ async function Page() {
       }
     : {};
 
-  return <AboutUsClient content={content} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AboutUsClient content={content} />
+    </Suspense>
+  );
 }
 
 export default Page;
