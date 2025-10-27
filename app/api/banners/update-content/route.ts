@@ -10,34 +10,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { heroTitle } = await request.json();
+    const body = await request.json();
+    const { page, ...updates } = body;
 
-    if (!heroTitle) {
+    if (!page) {
       return NextResponse.json(
-        { error: "Hero title is required" },
+        { error: "Page identifier is required" },
         { status: 400 }
       );
     }
 
     const client = await clientPromise;
     const db = client.db("vom_sauterhof");
-    const homepageCollection = db.collection("homepage");
 
-    const result = await homepageCollection.updateOne(
-      {},
-      { $set: { heroTitle } },
+    await db.collection("banners").updateOne(
+      { page },
+      {
+        $set: {
+          ...updates,
+          updatedAt: new Date(),
+        },
+      },
       { upsert: true }
     );
 
     return NextResponse.json({
       success: true,
-      message: "Hero title updated successfully",
-      result,
+      message: "Banner content updated successfully",
     });
   } catch (error) {
-    console.error("Error updating hero title:", error);
+    console.error("Error updating banner content:", error);
     return NextResponse.json(
-      { error: "Failed to update hero title" },
+      { error: "Failed to update banner content" },
       { status: 500 }
     );
   }

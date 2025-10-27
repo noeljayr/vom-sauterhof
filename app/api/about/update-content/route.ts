@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import clientPromise from "@/lib/mongodb";
+import { verifyAuth } from "@/lib/auth";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    const authResult = await verifyAuth(request);
+    if (!authResult.authenticated) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
 
     const client = await clientPromise;

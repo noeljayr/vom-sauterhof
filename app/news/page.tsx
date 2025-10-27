@@ -1,5 +1,4 @@
-import Banner from "@/components/Banner";
-import NewsPageClient from "@/components/pages/NewsPageClient";
+import NewsPageWrapper from "@/components/pages/NewsPageWrapper";
 import clientPromise from "@/lib/mongodb";
 import { BannerContent } from "@/types/banner";
 
@@ -48,13 +47,11 @@ async function Page() {
   }));
 
   return (
-    <div className="w-full flex flex-col">
-      <Banner
-        name={bannerContent.title}
-        description={bannerContent.description}
-      />
-      <NewsPageClient content={newsPageContent} news={news} />
-    </div>
+    <NewsPageWrapper
+      bannerContent={bannerContent}
+      newsPageContent={newsPageContent}
+      news={news}
+    />
   );
 }
 

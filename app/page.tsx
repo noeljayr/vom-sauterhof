@@ -32,6 +32,23 @@ async function Page() {
     status: n.status,
   }));
 
+  // Fetch images
+  const imagesCollection = db.collection("images");
+  const imagesData = await imagesCollection.findOne({
+    _id: "site-images",
+  } as any);
+
+  const images = {
+    darkSection1: imagesData?.darkSection1 || "/section-3.1.png",
+    darkSection2: imagesData?.darkSection2 || "/section-3.2.png",
+    darkSection3: imagesData?.darkSection3 || "/section-3.3.png",
+    darkSection4: imagesData?.darkSection4 || "/section-3.4.png",
+    gallery1: imagesData?.gallery1 || "/section-2.1-img.png",
+    gallery2: imagesData?.gallery2 || "/section-2.2-img.png",
+    gallery3: imagesData?.gallery3 || "/section-2.3-img.png",
+    whyBreedDog: imagesData?.whyBreedDog || "/why-breed-dogs.png",
+  };
+
   // Convert MongoDB document to plain object (remove _id and other non-serializable fields)
   const content: HomepageContent = homepageContent
     ? {
@@ -58,7 +75,7 @@ async function Page() {
 
   return (
     <Suspense fallback={<></>}>
-      <Home content={content} news={news} />
+      <Home content={content} news={news} images={images} />
     </Suspense>
   );
 }

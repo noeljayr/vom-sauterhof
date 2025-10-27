@@ -27,9 +27,22 @@ async function Page() {
       }
     : {};
 
+  // Fetch images
+  const imagesCollection = db.collection("images");
+  const imagesData = await imagesCollection.findOne({
+    _id: "site-images",
+  } as any);
+
+  const images = {
+    aboutFamily: imagesData?.aboutFamily || "/family.png",
+    aboutFarm: imagesData?.aboutFarm || "/farm.png",
+    aboutPack: imagesData?.aboutPack || "/Hunderudel.png",
+    aboutFinal: imagesData?.aboutFinal || "/IMG_7126_edited_edited_edited.png",
+  };
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <AboutUsClient content={content} />
+      <AboutUsClient content={content} images={images} />
     </Suspense>
   );
 }

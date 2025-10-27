@@ -1,20 +1,24 @@
 "use client";
 
 import Banner from "@/components/Banner";
-import familyImg from "@/public/family.png";
-import famImg from "@/public/farm.png";
-import Hunderudel from "@/public/Hunderudel.png";
-import IMG_7126 from "@/public/IMG_7126_edited_edited_edited.png";
-import Image from "next/image";
 import { AboutContent } from "@/types/about";
 import { useSearchParams } from "next/navigation";
 import EditableTextAbout from "@/components/EditableTextAbout";
+import EditableImage from "@/components/EditableImage";
+
+type AboutImages = {
+  aboutFamily?: string;
+  aboutFarm?: string;
+  aboutPack?: string;
+  aboutFinal?: string;
+};
 
 type Props = {
   content: AboutContent;
+  images: AboutImages;
 };
 
-export default function AboutUsClient({ content }: Props) {
+export default function AboutUsClient({ content, images }: Props) {
   const searchParams = useSearchParams();
   const isEditMode = searchParams.get("mode") === "edit";
 
@@ -64,19 +68,29 @@ export default function AboutUsClient({ content }: Props) {
             />
           </div>
 
-          <Image
-            src={familyImg}
-            alt="family"
-            className="h-[15rem] w-full object-cover rounded-[0.85rem]"
-          />
+          <div className="relative h-[15rem] w-full">
+            <EditableImage
+              initialSrc={images.aboutFamily || "/family.png"}
+              fieldName="aboutFamily"
+              isEditMode={isEditMode}
+              alt="family"
+              fill
+              className="object-cover rounded-[0.85rem]"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-[50%_1fr] items-center gap-10 w-full ">
-          <Image
-            src={famImg}
-            alt="fam"
-            className="h-[15rem] w-full object-cover rounded-[0.85rem]"
-          />
+          <div className="relative h-[15rem] w-full">
+            <EditableImage
+              initialSrc={images.aboutFarm || "/farm.png"}
+              fieldName="aboutFarm"
+              isEditMode={isEditMode}
+              alt="farm"
+              fill
+              className="object-cover rounded-[0.85rem]"
+            />
+          </div>
 
           <div className="flex flex-col">
             <EditableTextAbout
@@ -116,19 +130,31 @@ export default function AboutUsClient({ content }: Props) {
             />
           </div>
 
-          <Image
-            src={Hunderudel}
-            alt="Hunderudel"
-            className="h-[15rem] w-full object-cover rounded-[0.85rem]"
-          />
+          <div className="relative h-[15rem] w-full">
+            <EditableImage
+              initialSrc={images.aboutPack || "/Hunderudel.png"}
+              fieldName="aboutPack"
+              isEditMode={isEditMode}
+              alt="Hunderudel"
+              fill
+              className="object-cover rounded-[0.85rem]"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-[50%_1fr] items-center gap-10 w-full ">
-          <Image
-            src={IMG_7126}
-            alt="IMG_7126"
-            className="h-[15rem] w-full object-cover rounded-[0.85rem]"
-          />
+          <div className="relative h-[15rem] w-full">
+            <EditableImage
+              initialSrc={
+                images.aboutFinal || "/IMG_7126_edited_edited_edited.png"
+              }
+              fieldName="aboutFinal"
+              isEditMode={isEditMode}
+              alt="IMG_7126"
+              fill
+              className="object-cover rounded-[0.85rem]"
+            />
+          </div>
 
           <div className="flex flex-col">
             <EditableTextAbout

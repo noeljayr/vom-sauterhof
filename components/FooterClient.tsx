@@ -17,6 +17,10 @@ export function FooterClient({ content }: Props) {
   const searchParams = useSearchParams();
   const isEditMode = searchParams.get("mode") === "edit";
 
+  const addEditModeParam = (href: string) => {
+    return isEditMode ? `${href}?mode=edit` : href;
+  };
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (footerRef.current) {
@@ -120,7 +124,7 @@ export function FooterClient({ content }: Props) {
                   isEditMode={isEditMode}
                   className="hover:underline transition-all duration-300 block"
                   as="a"
-                  href="#"
+                  href={addEditModeParam("/")}
                 />
               </li>
               <li>
@@ -130,7 +134,7 @@ export function FooterClient({ content }: Props) {
                   isEditMode={isEditMode}
                   className="hover:underline transition-all duration-300 block"
                   as="a"
-                  href="#"
+                  href={addEditModeParam("/uber-uns")}
                 />
               </li>
               <li>
@@ -140,7 +144,7 @@ export function FooterClient({ content }: Props) {
                   isEditMode={isEditMode}
                   className="hover:underline transition-all duration-300 block"
                   as="a"
-                  href="#"
+                  href={addEditModeParam("/news")}
                 />
               </li>
               <li>
@@ -150,7 +154,7 @@ export function FooterClient({ content }: Props) {
                   isEditMode={isEditMode}
                   className="hover:underline transition-all duration-300 block"
                   as="a"
-                  href="#"
+                  href={addEditModeParam("/unsere-rassezucht")}
                 />
               </li>
               <li>

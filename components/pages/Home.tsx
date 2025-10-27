@@ -7,10 +7,11 @@ import { IconArrowUpRight } from "@tabler/icons-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import EditableHeroHeading from "@/components/EditableHeroHeading";
 import EditableText from "@/components/EditableText";
+import EditableImage from "@/components/EditableImage";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -37,12 +38,24 @@ type HomepageContent = {
   newsSeeAllSubtext?: string;
 };
 
+type SiteImages = {
+  darkSection1?: string;
+  darkSection2?: string;
+  darkSection3?: string;
+  darkSection4?: string;
+  gallery1?: string;
+  gallery2?: string;
+  gallery3?: string;
+  whyBreedDog?: string;
+};
+
 type Props = {
   content: HomepageContent;
   news: News[];
+  images: SiteImages;
 };
 
-export default function Home({ content, news }: Props) {
+export default function Home({ content, news, images }: Props) {
   const searchParams = useSearchParams();
   const isEditMode = searchParams.get("mode") === "edit";
 
@@ -374,31 +387,37 @@ export default function Home({ content, news }: Props) {
         </section>
       </div>
 
-      {/* Photo Gallery */}
+      {}
       <section className="section-container py-12 pb-0 md:py-20 mx-auto parallax-section">
         <div
           ref={galleryRef}
           className="grid grid-cols-1 md:grid-cols-7 gap-4 md:gap-6 mb-8"
         >
           <div className="relative h-[250px] md:h-[374px] md:col-span-2 hover-scale cursor-pointer">
-            <Image
-              src="/section-2.1-img.png"
+            <EditableImage
+              initialSrc={images.gallery1 || "/section-2.1-img.png"}
+              fieldName="gallery1"
+              isEditMode={isEditMode}
               alt="Rottweiler puppies in field"
               fill
               className="object-cover rounded-lg transition-all duration-500"
             />
           </div>
           <div className="relative h-[250px] md:h-[374px] md:col-span-3 hover-scale cursor-pointer">
-            <Image
-              src="/section-2.2-img.png"
+            <EditableImage
+              initialSrc={images.gallery2 || "/section-2.2-img.png"}
+              fieldName="gallery2"
+              isEditMode={isEditMode}
               alt="Person with dogs in mountains"
               fill
               className="object-cover rounded-lg transition-all duration-500"
             />
           </div>
           <div className="relative h-[250px] md:h-[374px] md:col-span-2 hover-scale cursor-pointer">
-            <Image
-              src="/section-2.3-img.png"
+            <EditableImage
+              initialSrc={images.gallery3 || "/section-2.3-img.png"}
+              fieldName="gallery3"
+              isEditMode={isEditMode}
               alt="Dogs on mountain rocks"
               fill
               className="object-cover rounded-lg transition-all duration-500"
@@ -429,12 +448,14 @@ export default function Home({ content, news }: Props) {
           </div>
 
           <div className="content-card grid lg:grid-flow-col gap-8 lg:gap-[100px] justify-center items-center bg-[#fff]/25 rounded-[20px] md:rounded-[30px] py-8 md:py-16 w-full mx-auto max-w-6xl border border-[#BEA99A4D] md:px-16">
-            <div className="relative w-40 h-40 md:w-60 md:h-60 after:w-40 after:h-40 md:after:w-60 md:after:h-60 after:rounded-full after:border-[#C09877] after:border-2 md:after:border-3 after:absolute after:top-2 after:-left-2 after:z-5 mx-auto">
-              <Image
-                src="/why-breed-dogs.png"
+            <div className="relative w-40 h-40 md:w-60 md:h-60 after:w-40 after:h-40 md:after:w-60 md:after:h-60 after:rounded-full after:border-[#C09877] after:border-2 md:after:border-3 after:absolute after:top-2 after:-left-2 after:z-[-1] mx-auto">
+              <EditableImage
+                initialSrc={images.whyBreedDog || "/why-breed-dogs.png"}
+                fieldName="whyBreedDog"
+                isEditMode={isEditMode}
                 alt="Dog portrait"
                 fill
-                className="object-cover rounded-full z-10 shrink-0"
+                className="object-cover rounded-full z-[2] shrink-0"
               />
             </div>
 
@@ -598,32 +619,40 @@ export default function Home({ content, news }: Props) {
           </div>
           <div className="grid grid-cols-2 right-0 absolute grid-rows-5 gap-3 md:gap-4 h-[350px] md:h-[475px] max-w-[561px] w-full ml-auto lg:mx-0">
             <div className="dark-image relative h-full row-span-2">
-              <Image
-                src="/section-3.1.png"
+              <EditableImage
+                initialSrc={images.darkSection1 || "/section-3.1.png"}
+                fieldName="darkSection1"
+                isEditMode={isEditMode}
                 alt="Person with dog"
                 fill
                 className="object-cover rounded-lg"
               />
             </div>
             <div className="dark-image relative h-full row-span-3">
-              <Image
-                src="/section-3.3.png"
+              <EditableImage
+                initialSrc={images.darkSection3 || "/section-3.3.png"}
+                fieldName="darkSection3"
+                isEditMode={isEditMode}
                 alt="Child with puppy"
                 fill
                 className="object-cover rounded-lg"
               />
             </div>
             <div className="dark-image relative h-full row-span-3">
-              <Image
-                src="/section-3.2.png"
+              <EditableImage
+                initialSrc={images.darkSection2 || "/section-3.2.png"}
+                fieldName="darkSection2"
+                isEditMode={isEditMode}
                 alt="Woman with puppy"
                 fill
                 className="object-cover rounded-lg"
               />
             </div>
             <div className="dark-image relative h-full row-span-2">
-              <Image
-                src="/section-3.4.png"
+              <EditableImage
+                initialSrc={images.darkSection4 || "/section-3.4.png"}
+                fieldName="darkSection4"
+                isEditMode={isEditMode}
                 alt="Dogs running"
                 fill
                 className="object-cover rounded-lg"
@@ -650,52 +679,52 @@ export default function Home({ content, news }: Props) {
             ))}
           </div>
 
-          {
-            news.length > 3 && <div className="mt-8 md:mt-5">
-            <div className="border border-[#1A1A1A1A] rounded-full flex p-1 pr-2 items-center justify-center w-fit mx-auto hover-scale cursor-pointer">
-              <div className="flex items-center relative w-[7rem]">
-                {news.slice(3, 6).map((n, index) => (
-                  <span
-                    key={n.id || index}
-                    className={`h-10 w-10 rounded-full overflow-hidden border-[3px] border-[#F9ECE1] absolute`}
-                    style={{
-                      left: `${index * 1.75}rem`, // controls overlap amount
-                      zIndex: news.length - index, // ensures proper stacking order
-                    }}
-                  >
-                    <img
-                      src={`${n.coverImage}`}
-                      alt={n.title}
-                      className="h-full w-full object-cover"
-                    />
-                  </span>
-                ))}
-              </div>
-              <div className="flex flex-col gap-1 text-xs mr-4">
-                <b>
-                  <EditableText
-                    initialValue={content.newsSeeAllText || ""}
-                    fieldName="newsSeeAllText"
-                    isEditMode={isEditMode}
-                    className="inline"
-                    as="span"
-                  />{" "}
-                  <span className="text-[#D87B2C]">{news.length}+</span>
-                </b>
-                <b className="flex items-center opacity-35">
-                  <EditableText
-                    initialValue={content.newsSeeAllSubtext || ""}
-                    fieldName="newsSeeAllSubtext"
-                    isEditMode={isEditMode}
-                    className="inline"
-                    as="span"
-                  />{" "}
-                  <IconArrowUpRight className="ml-1 h-4 w-4" />
-                </b>
+          {news.length > 3 && (
+            <div className="mt-8 md:mt-5">
+              <div className="border border-[#1A1A1A1A] rounded-full flex p-1 pr-2 items-center justify-center w-fit mx-auto hover-scale cursor-pointer">
+                <div className="flex items-center relative w-[7rem]">
+                  {news.slice(3, 6).map((n, index) => (
+                    <span
+                      key={n.id || index}
+                      className={`h-10 w-10 rounded-full overflow-hidden border-[3px] border-[#F9ECE1] absolute`}
+                      style={{
+                        left: `${index * 1.75}rem`, // controls overlap amount
+                        zIndex: news.length - index, // ensures proper stacking order
+                      }}
+                    >
+                      <img
+                        src={`${n.coverImage}`}
+                        alt={n.title}
+                        className="h-full w-full object-cover"
+                      />
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-col gap-1 text-xs mr-4">
+                  <b>
+                    <EditableText
+                      initialValue={content.newsSeeAllText || ""}
+                      fieldName="newsSeeAllText"
+                      isEditMode={isEditMode}
+                      className="inline"
+                      as="span"
+                    />{" "}
+                    <span className="text-[#D87B2C]">{news.length}+</span>
+                  </b>
+                  <b className="flex items-center opacity-35">
+                    <EditableText
+                      initialValue={content.newsSeeAllSubtext || ""}
+                      fieldName="newsSeeAllSubtext"
+                      isEditMode={isEditMode}
+                      className="inline"
+                      as="span"
+                    />{" "}
+                    <IconArrowUpRight className="ml-1 h-4 w-4" />
+                  </b>
+                </div>
               </div>
             </div>
-          </div>
-          }
+          )}
         </div>
       </section>
     </div>

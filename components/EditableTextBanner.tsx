@@ -7,15 +7,17 @@ type Props = {
   initialValue: string;
   fieldName: string;
   isEditMode: boolean;
+  page: string;
   className?: string;
   as?: "h1" | "h2" | "h3" | "h4" | "p" | "span";
   multiline?: boolean;
 };
 
-export default function EditableTextAbout({
+export default function EditableTextBanner({
   initialValue,
   fieldName,
   isEditMode,
+  page,
   className = "",
   as: Component = "p",
   multiline = false,
@@ -29,12 +31,12 @@ export default function EditableTextAbout({
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const response = await fetch("/api/about/update-content", {
+      const response = await fetch("/api/banners/update-content", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ [fieldName]: tempValue }),
+        body: JSON.stringify({ page, [fieldName]: tempValue }),
       });
 
       if (response.ok) {
@@ -72,7 +74,7 @@ export default function EditableTextAbout({
             <textarea
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
-              className={`w-full ${className} border-2 border-[#58483B] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#58483B]`}
+              className={`w-full ${className} border-2 border-[#58483B] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#58483B] bg-white text-black`}
               rows={3}
               autoFocus
             />
@@ -81,7 +83,7 @@ export default function EditableTextAbout({
               type="text"
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
-              className={`w-full ${className} border-2 border-[#58483B] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#58483B]`}
+              className={`w-full ${className} border-2 border-[#58483B] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#58483B] bg-white text-black`}
               autoFocus
             />
           )}

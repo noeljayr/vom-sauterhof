@@ -149,7 +149,7 @@ function NewsTable() {
               <span></span>
               <span className="font-p4 font-medium opacity-50">Title</span>
               <span className="font-p4 font-medium opacity-50">Posted on</span>
-              
+
               <span className="font-p4 font-medium opacity-50">Status</span>
               <span className="font-p4 font-medium opacity-50"></span>
             </motion.div>
@@ -211,6 +211,7 @@ function NewsTable() {
             >
               {news.map((n) => {
                 const isSelected = selectedIds.has(n.id);
+                const isActionActive = activeActionId === n.id;
                 return (
                   <div
                     key={n.id}
@@ -220,7 +221,9 @@ function NewsTable() {
                     className={`${
                       isSelected
                         ? "bg-[#F5DFCC]"
-                        : "bg-[#F9ECE1] hover:brightness-95"
+                        : isActionActive
+                        ? "bg-[#F5DFCC] z-[5]"
+                        : "bg-[#F9ECE1] hover:brightness-95 z-[0]"
                     }  grid font-p4 grid-cols-[2rem_4rem_1fr_15%_8rem_5rem] pb-2 border-b border-b-black/5 gap-4 w-full items-center`}
                   >
                     <span
@@ -272,7 +275,7 @@ function NewsTable() {
                     <span className="truncate cursor-pointer flex items-center h-14">
                       {n.date}
                     </span>
-                    
+
                     <span className={`capitalize font-semibold ${n.status}`}>
                       {n.status}
                     </span>
