@@ -130,7 +130,6 @@
   body {
     @apply bg-background text-foreground;
   }
- 
 }
 
 h1 {
@@ -208,6 +207,12 @@ h4 {
 
 .section-container {
   width: 80%;
+}
+
+@media (width < 640px) {
+  .section-container {
+    width: 90%;
+  }
 }
 
 .new-content p {

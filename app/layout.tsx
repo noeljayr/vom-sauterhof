@@ -23,11 +23,68 @@ import { AuthInitializer } from "@/components/AuthInitializer";
 import clientPromise from "@/lib/mongodb";
 import { NavbarContent } from "@/types/navbar";
 import { FooterContent } from "@/types/footer";
+import { OrganizationSchema } from "@/components/StructuredData";
 
 export const metadata: Metadata = {
-  title: "Beauceron Vom Sauterhof",
+  metadataBase: new URL("https://vom-sauterhof.de"),
+  title: {
+    default: "Beauceron Vom Sauterhof",
+    template: "%s | Beauceron Vom Sauterhof",
+  },
   description:
-    "Wir haben eine kleine familiäre Beauceronzucht und züchten mit Leidenschaft und Herzblut  Beauceron mit FCI-Papieren. ",
+    "Wir haben eine kleine familiäre Beauceronzucht und züchten mit Leidenschaft und Herzblut Beauceron mit FCI-Papieren.",
+  keywords: [
+    "Beauceron",
+    "Beauceronzucht",
+    "FCI",
+    "Hunde",
+    "Züchter",
+    "Sauterhof",
+    "Welpen",
+    "Rassehunde",
+    "Deutschland",
+  ],
+  authors: [{ name: "Beauceron Vom Sauterhof" }],
+  creator: "Beauceron Vom Sauterhof",
+  publisher: "Beauceron Vom Sauterhof",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "de_DE",
+    url: "https://vom-sauterhof.de",
+    title: "Beauceron Vom Sauterhof",
+    description:
+      "Wir haben eine kleine familiäre Beauceronzucht und züchten mit Leidenschaft und Herzblut Beauceron mit FCI-Papieren.",
+    siteName: "Beauceron Vom Sauterhof",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Beauceron Vom Sauterhof",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Beauceron Vom Sauterhof",
+    description:
+      "Wir haben eine kleine familiäre Beauceronzucht und züchten mit Leidenschaft und Herzblut Beauceron mit FCI-Papieren.",
+    images: ["/opengraph-image.png"],
+  },
+  verification: {
+    google: "your-google-verification-code",
+  },
 };
 
 export const revalidate = 0;
@@ -77,10 +134,17 @@ export default async function RootLayout({
     : {};
 
   return (
-    <html lang="en">
+    <html lang="de" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#F9ECE1" />
+      </head>
       <body
         className={`min-h-screen antialiased bg-[#F9ECE1] overflow-x-hidden`}
       >
+        <OrganizationSchema />
         <AuthInitializer />
         <Suspense fallback={null}>
           <Mode />

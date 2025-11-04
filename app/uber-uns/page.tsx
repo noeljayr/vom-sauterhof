@@ -2,6 +2,17 @@ import { Suspense } from "react";
 import clientPromise from "@/lib/mongodb";
 import { AboutContent } from "@/types/about";
 import AboutUsClient from "@/components/pages/AboutUsClient";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Über Uns",
+  description:
+    "Lernen Sie unsere Familie und unsere Beauceronzucht kennen. Erfahren Sie mehr über unsere Philosophie, unser Zuhause und unser Rudel.",
+  openGraph: {
+    title: "Über Uns | Beauceron Vom Sauterhof",
+    description: "Lernen Sie unsere Familie und unsere Beauceronzucht kennen.",
+  },
+};
 
 export const revalidate = 0;
 
@@ -41,7 +52,7 @@ async function Page() {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div></div>}>
       <AboutUsClient content={content} images={images} />
     </Suspense>
   );

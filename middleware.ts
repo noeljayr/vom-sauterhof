@@ -48,6 +48,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(cleanUrl);
   }
 
+  if (
+    request.nextUrl.pathname === "/auth" ||
+    request.nextUrl.pathname === "/auth/"
+  ) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
+
   return NextResponse.next();
 }
 

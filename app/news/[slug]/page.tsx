@@ -1,124 +1,162 @@
-"use client";
-
 import Banner from "@/components/Banner";
 import NewsCard from "@/components/news/NewsCard";
+import { NewsArticleSchema } from "@/components/StructuredData";
+import clientPromise from "@/lib/mongodb";
 import { News } from "@/types/News";
-import { IconArrowLeft, IconShare3 } from "@tabler/icons-react";
+import { IconArrowLeft } from "@tabler/icons-react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { notFound } from "next/navigation";
 
-function Page() {
-  const { slug } = useParams<{ slug: string }>();
-  const [selectedNews, setSelectedNews] = useState<News | null>(null);
-  const [otherNews, setOtherNews] = useState<News[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+type Props = {
+  params: { slug: string };
+};
 
-  useEffect(() => {
-    if (!slug) return;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const client = await clientPromise;
+  const db = client.db("vom_sauterhof");
+  const newsCollection = db.collection("news");
 
-    const fetchNews = async () => {
-      try {
-        // Fetch the selected news
-        const response = await fetch(`/api/news/get?slug=${slug}`);
-        const data = await response.json();
+  const newsData = await newsCollection.findOne({
+    slug: params.slug,
+    status: "published",
+  });
 
-        if (data.success) {
-          setSelectedNews(data.news);
-        }
-
-        // Fetch other news
-        const otherResponse = await fetch("/api/news/list");
-        const otherData = await otherResponse.json();
-
-        if (otherData.success) {
-          const filtered = otherData.news.filter(
-            (item: News) => item.slug !== slug && item.status === "published"
-          );
-          setOtherNews(filtered);
-        }
-      } catch (error) {
-        console.error("Error fetching news:", error);
-      } finally {
-        setIsLoading(false);
-      }
+  if (!newsData) {
+    return {
+      title: "Artikel nicht gefunden",
     };
-
-    fetchNews();
-  }, [slug]);
-
-  if (!slug) {
-    return <></>;
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col">
-        <Banner />
-        <div className="text-center py-8">Loading...</div>
-      </div>
-    );
+  const imageUrl = newsData.coverImage?.startsWith("data:")
+    ? "/opengraph-image.png"
+    : `/news/${newsData.coverImage}`;
+
+  return {
+    title: newsData.title,
+    description: newsData.content?.substring(0, 160).replace(/<[^>]*>/g, ""),
+    openGraph: {
+      title: newsData.title,
+      description: newsData.content?.substring(0, 160).replace(/<[^>]*>/g, ""),
+      type: "article",
+      publishedTime: newsData.createdAt,
+      modifiedTime: newsData.updatedAt,
+      authors: [newsData.author],
+      images: [imageUrl],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: newsData.title,
+      description: newsData.content?.substring(0, 160).replace(/<[^>]*>/g, ""),
+      images: [imageUrl],
+    },
+  };
+}
+
+async function Page({ params }: Props) {
+  const client = await clientPromise;
+  const db = client.db("vom_sauterhof");
+  const newsCollection = db.collection("news");
+
+  const newsData = await newsCollection.findOne({
+    slug: params.slug,
+    status: "published",
+  });
+
+  if (!newsData) {
+    notFound();
   }
 
-  if (!selectedNews) {
-    return (
-      <div className="flex flex-col">
-        <Banner />
-        <div className="text-center py-8">News not found</div>
-      </div>
-    );
-  }
+  const selectedNews: News = {
+    id: newsData._id.toString(),
+    title: newsData.title,
+    author: newsData.author,
+    content: newsData.content,
+    date: newsData.date,
+    hasVideo: newsData.hasVideo || false,
+    coverImage: newsData.coverImage || "",
+    slug: newsData.slug,
+    status: newsData.status,
+  };
+
+  // Fetch other news
+  const otherNewsData = await newsCollection
+    .find({
+      status: "published",
+      slug: { $ne: params.slug },
+    })
+    .limit(3)
+    .toArray();
+
+  const otherNews: News[] = otherNewsData.map((n) => ({
+    id: n._id.toString(),
+    title: n.title,
+    author: n.author,
+    content: n.content,
+    date: n.date,
+    hasVideo: n.hasVideo || false,
+    coverImage: n.coverImage || "",
+    slug: n.slug,
+    status: n.status,
+  }));
+
+  const imageUrl = selectedNews.coverImage.startsWith("data:")
+    ? selectedNews.coverImage
+    : `/news/${selectedNews.coverImage}`;
 
   return (
-    <div className="flex flex-col">
-      <Banner />
-      <div className="flex flex-col relative w-[60%] bg-red-80 mx-auto top-[-12rem] ">
-        <Link
-          href="/news"
-          className="bg-[#FBF2EA] w-fit font-medium flex font-p4 items-center border border-[var(--c-border)] px-2 py-1 rounded-3xl"
-        >
-          <IconArrowLeft className="h-4 w-4 mr-2" color="#CD6917" />
-          Zurück zur Übersicht
-        </Link>
+    <>
+      <NewsArticleSchema
+        title={selectedNews.title}
+        description={selectedNews.content
+          .substring(0, 160)
+          .replace(/<[^>]*>/g, "")}
+        image={imageUrl}
+        datePublished={selectedNews.date}
+        author={selectedNews.author}
+        url={`https://vom-sauterhof.de/news/${selectedNews.slug}`}
+      />
+      <div className="flex flex-col">
+        <Banner />
+        <div className="flex flex-col relative w-[60%] max-[900]:w-[80%] max-[720px]:w-[90%] mx-auto top-[-12rem] ">
+          <Link
+            href="/news"
+            className="bg-[#FBF2EA] w-fit font-medium flex font-p4 items-center border border-[var(--c-border)] px-2 py-1 rounded-3xl"
+          >
+            <IconArrowLeft className="h-4 w-4 mr-2" color="#CD6917" />
+            Zurück zur Übersicht
+          </Link>
 
-        <div className="flex w-full relative">
-          <div className="absolute flex right-2 top-6">
-            {/* <button className="flex share-btn items-center text-[#58483B] font-semibold font-p3">
-              <IconShare3 /> Aktie
-            </button> */}
+          <div className="flex w-full relative">
+            <img
+              src={imageUrl}
+              alt={selectedNews.title}
+              className="w-full h-fit object-cover rounded-[1rem] my-4"
+            />
           </div>
-          <img
-            src={
-              selectedNews.coverImage.startsWith("data:")
-                ? selectedNews.coverImage
-                : `/news/${selectedNews.coverImage}`
-            }
-            alt={selectedNews.title}
-            className="w-full h-fit object-cover rounded-[1rem] my-4"
+
+          <div className="py-2 border-b flex max-[720px]:flex-col-reverse max-[720px]:items-start items-center border-b-[var(--c-border)]">
+            <h4>{selectedNews.title}</h4>
+            <span className="opacity-50 font-p4 ml-auto max-[720px]:ml-0 max-[720px]:mb-2 max-[720px]:w-fit">
+              Gepostet am {selectedNews.date}
+            </span>
+          </div>
+
+          <div
+            className="prose max-w-none flex flex-col new-content mt-10"
+            dangerouslySetInnerHTML={{ __html: selectedNews.content }}
           />
         </div>
 
-        <div className="py-2 border-b flex items-center border-b-[var(--c-border)]">
-          <h4>{selectedNews.title}</h4>
-          <span className="opacity-50 font-p4 ml-auto">
-            Gepostet am {selectedNews.date}
-          </span>
-        </div>
-
-        <div
-          className="prose max-w-none flex flex-col new-content mt-10"
-          dangerouslySetInnerHTML={{ __html: selectedNews.content }}
-        />
-      </div>
-
-      <div className="w-full py-32 bg-[#58483B]">
-        <div className="news-grid grid grid-cols-1  w-[60%] mx-auto md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {otherNews.slice(0, 3).map((n) => (
-            <NewsCard color="#ffff" news={n} key={n.id} />
-          ))}
+        <div className="w-full py-32 bg-[#58483B]">
+          <div className="news-grid grid grid-cols-1  w-[60%] mx-auto md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {otherNews.map((n) => (
+              <NewsCard color="#ffff" news={n} key={n.id} />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -30,7 +30,7 @@ export default function AboutUsClient({ content, images }: Props) {
         isEditMode={isEditMode}
       />
 
-      <div className="w-[60%] flex flex-col gap-16 mx-auto">
+      <div className="w-[60%] flex flex-col gap-16 max-sm:w-full px-10 mx-auto">
         <div className="flex flex-col items-center gap-2">
           <EditableTextAbout
             initialValue={content.welcomeHeading || ""}
@@ -43,13 +43,13 @@ export default function AboutUsClient({ content, images }: Props) {
             initialValue={content.welcomeText || ""}
             fieldName="welcomeText"
             isEditMode={isEditMode}
-            className="w-full text-center font-p3 opacity-75"
+            className="w-full text-center max-sm:text-left font-p3 opacity-75"
             as="p"
             multiline
           />
         </div>
 
-        <div className="grid grid-cols-[1fr_40%] items-center gap-10 w-full border border-[var(--c-border)] p-8 rounded-[1rem]">
+        <div className="grid grid-cols-[1fr_40%] max-sm:flex max-sm:flex-col items-center gap-10 w-full border border-[var(--c-border)] p-8 max-sm:p-4 max-sm:px-6 max-sm:pb-6 rounded-[1rem]">
           <div className="flex flex-col">
             <EditableTextAbout
               initialValue={content.homeHeading || ""}
@@ -80,7 +80,7 @@ export default function AboutUsClient({ content, images }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-[50%_1fr] items-center gap-10 w-full ">
+        <div className="grid grid-cols-[50%_1fr] max-sm:flex max-sm:flex-col max-sm:mb-16 items-center gap-10 w-full ">
           <div className="relative h-[15rem] w-full">
             <EditableImage
               initialSrc={images.aboutFarm || "/farm.png"}
@@ -111,7 +111,7 @@ export default function AboutUsClient({ content, images }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-[1fr_50%] items-center gap-10 w-full ">
+        <div className="grid grid-cols-[1fr_50%] max-sm:flex max-sm:flex-col max-sm:mb-16 items-center gap-10 w-full ">
           <div className="flex flex-col">
             <EditableTextAbout
               initialValue={content.packHeading || ""}
@@ -142,7 +142,7 @@ export default function AboutUsClient({ content, images }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-[50%_1fr] items-center gap-10 w-full ">
+        <div className="grid grid-cols-[50%_1fr] max-sm:flex max-sm:flex-col max-sm:mb-16 items-center gap-10 w-full ">
           <div className="relative h-[15rem] w-full">
             <EditableImage
               initialSrc={

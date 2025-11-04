@@ -47,7 +47,7 @@ function Banner({
             initialValue={description}
             fieldName="bannerDescription"
             isEditMode={isEditMode}
-            className="opacity-75 font-p3 w-[65ch] mx-auto text-center mt-2"
+            className="opacity-75 font-p3 w-[65ch] max-sm:w-full max-sm:px-10 mx-auto text-center mt-2"
             as="p"
             multiline
           />
@@ -57,7 +57,7 @@ function Banner({
             fieldName="description"
             isEditMode={isEditMode}
             page={page}
-            className="opacity-75 font-p3 w-[65ch] mx-auto text-center mt-2"
+            className="opacity-75 font-p3 w-[65ch] max-sm:w-full max-sm:px-10 mx-auto text-center mt-2"
             as="p"
             multiline
           />

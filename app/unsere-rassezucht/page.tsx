@@ -24,7 +24,7 @@ async function Page() {
         description={bannerContent.description}
       />
 
-      <div className="grid gap-8 grid-cols-3 section-container mx-auto">
+      <div className="grid gap-8 grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 max-sm:mb-16 section-container mx-auto">
         {beauceron.map((dog) => (
           <BeauceronCard key={dog.id} beauceron={dog} />
         ))}

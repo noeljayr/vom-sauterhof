@@ -1,6 +1,18 @@
 import NewsPageWrapper from "@/components/pages/NewsPageWrapper";
 import clientPromise from "@/lib/mongodb";
 import { BannerContent } from "@/types/banner";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Neuigkeiten",
+  description:
+    "Aktuelle Neuigkeiten und Updates von unserer Beauceronzucht Vom Sauterhof. Erfahren Sie mehr über unsere Würfe, Welpen und Veranstaltungen.",
+  openGraph: {
+    title: "Neuigkeiten | Beauceron Vom Sauterhof",
+    description:
+      "Aktuelle Neuigkeiten und Updates von unserer Beauceronzucht Vom Sauterhof.",
+  },
+};
 
 async function Page() {
   const client = await clientPromise;

@@ -1025,7 +1025,7 @@ export default function RichTextEditor({
 
   return (
     <div className="rte">
-      <div className="toolbar">
+      <div className="toolbar flex max-[500px]:grid max-[500px]:grid-flow-col max-[500px]:overflow-x-auto">
         <button
           onClick={undo}
           disabled={!canUndo}

@@ -42,8 +42,8 @@ export default function NewsPageClient({ content, news }: Props) {
 
   return (
     <div className="flex flex-col section-container mx-auto">
-      <div className="flex items-center justify-between mb-12">
-        <div className="grid grid-cols-[1fr_auto] p-1 border border-[var(--c-border)] rounded-[0.5rem] w-[20rem] bg-[#EEE2D7]">
+      <div className="flex items-center max-sm:w-full max-sm:flex-col max-sm:gap-4 justify-between mb-12">
+        <div className="grid grid-cols-[1fr_auto] max-sm:w-full p-1 border border-[var(--c-border)] rounded-[0.5rem] w-[20rem] bg-[#EEE2D7]">
           <input
             type="text"
             placeholder={content.searchPlaceholder || "Search"}
@@ -56,7 +56,7 @@ export default function NewsPageClient({ content, news }: Props) {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-1 items-center ml-auto bg-[#FBF1EA] border border-[var(--c-border)] rounded-[0.65rem] w-[18rem] p-1">
+        <div className="grid grid-cols-2 gap-1 items-center ml-auto bg-[#FBF1EA] border border-[var(--c-border)] rounded-[0.65rem] w-[18rem] max-sm:w-full p-1">
           <span
             style={{ transition: "ease 0.5s" }}
             onClick={() => setSort("new")}

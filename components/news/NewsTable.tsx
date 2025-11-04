@@ -91,7 +91,7 @@ function NewsTable() {
   const hasSelection = selectedIds.size > 0;
 
   if (isLoading) {
-    return <div className="text-center py-8">Loading news...</div>;
+    return <div className="text-center py-8"></div>;
   }
 
   return (
@@ -121,7 +121,7 @@ function NewsTable() {
             <motion.div
               key={"tabler-header"}
               layout="position"
-              className="grid grid-cols-[2rem_4rem_1fr_15%_8rem_5rem] gap-4 w-full items-center"
+              className="grid grid-cols-[2rem_4rem_1fr_15%_8rem_5rem] max-[1000px]:grid-cols-[2rem_4rem_1fr_8rem_5rem] gap-4 w-full items-center"
             >
               <span className="font-p4 font-medium">
                 <span
@@ -148,7 +148,9 @@ function NewsTable() {
               </span>
               <span></span>
               <span className="font-p4 font-medium opacity-50">Title</span>
-              <span className="font-p4 font-medium opacity-50">Posted on</span>
+              <span className="font-p4 max-[1000px]:hidden font-medium opacity-50">
+                Posted on
+              </span>
 
               <span className="font-p4 font-medium opacity-50">Status</span>
               <span className="font-p4 font-medium opacity-50"></span>
@@ -224,7 +226,7 @@ function NewsTable() {
                         : isActionActive
                         ? "bg-[#F5DFCC] z-[5]"
                         : "bg-[#F9ECE1] hover:brightness-95 z-[0]"
-                    }  grid font-p4 grid-cols-[2rem_4rem_1fr_15%_8rem_5rem] pb-2 border-b border-b-black/5 gap-4 w-full items-center`}
+                    }  grid font-p4 grid-cols-[2rem_4rem_1fr_15%_8rem_5rem] max-[1000px]:grid-cols-[2rem_4rem_1fr_8rem_5rem] pb-2 border-b border-b-black/5 gap-4 w-full items-center`}
                   >
                     <span
                       onClick={() => toggleSelectRow(n.id)}
@@ -272,7 +274,7 @@ function NewsTable() {
                     >
                       {n.title}
                     </Link>
-                    <span className="truncate cursor-pointer flex items-center h-14">
+                    <span className="truncate max-[1000px]:hidden cursor-pointer flex items-center h-14">
                       {n.date}
                     </span>
 

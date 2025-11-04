@@ -206,9 +206,13 @@ export function Navbar({ content }: Props) {
           className="py-6 flex items-center justify-between"
         >
           <div className="section-container mx-auto grid grid-cols-[auto_auto] items-center justify-between">
-            <div className="flex items-center justify-center">
-              <Image src={logo} alt="Logo" className="w-[5rem]" />
-            </div>
+            <Link href={'/'} className="flex items-center justify-center">
+              <Image
+                src={logo}
+                alt="Logo"
+                className="w-[5rem] max-sm:w-[4rem]"
+              />
+            </Link>
 
             <nav
               ref={desktopNavRef}
@@ -266,7 +270,7 @@ export function Navbar({ content }: Props) {
           >
             <div
               ref={mobileMenuRef}
-              className="absolute right-0 top-0 h-dvh w-80 bg-[#BEA99A] shadow-2xl overflow-y-auto"
+              className="fixed flex flex-col right-0 top-0 h-dvh w-80 bg-[#BEA99A] shadow-2xl overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between p-6">
@@ -286,41 +290,51 @@ export function Navbar({ content }: Props) {
                 </button>
               </div>
 
-              <nav className="p-6 flex flex-col items-center">
-                <div className="space-y-3 w-full max-w-[240px]">
+              <nav className="flex flex-col items-center">
+                <div className="space-y-1 w-full px-4">
                   <Link
                     href={addEditModeParam("/")}
-                    className="mobile-menu-item block text-black font-medium text-lg py-3 px-4 rounded-lg bg-[#EEE5DD] hover:bg-white/50 transition-all duration-300 text-center"
+                    className={`mobile-menu-item block text-black font-medium font-p4 py-2 px-4 rounded-lg ${
+                      activeLink("/") ? "bg-[#EEE5DD]" : ""
+                    }  hover:bg-white/50 transition-all duration-300`}
                   >
                     {content.linkStart || "Start"}
                   </Link>
                   <Link
                     href={addEditModeParam("/uber-uns")}
-                    className="mobile-menu-item block text-black text-lg py-3 px-4 rounded-lg hover:bg-white/30 transition-all duration-300 text-center"
+                    className={`mobile-menu-item block text-black font-p4 py-2 px-4 rounded-lg ${
+                      activeLink("/uber-uns") ? "bg-[#EEE5DD]" : ""
+                    } hover:bg-white/30 transition-all duration-300`}
                   >
                     {content.linkAbout || "Über uns"}
                   </Link>
                   <Link
                     href={addEditModeParam("/news")}
-                    className="mobile-menu-item block text-black text-lg py-3 px-4 rounded-lg hover:bg-white/30 transition-all duration-300 text-center"
+                    className={`mobile-menu-item block text-black font-p4 py-2 px-4 rounded-lg ${
+                      activeLink("/news") ? "bg-[#EEE5DD]" : ""
+                    } hover:bg-white/30 transition-all duration-300`}
                   >
                     {content.linkNews || "News"}
                   </Link>
                   <Link
                     href={addEditModeParam("/unsere-rassezucht")}
-                    className="mobile-menu-item block text-black text-lg py-3 px-4 rounded-lg hover:bg-white/30 transition-all duration-300 text-center"
+                    className={`mobile-menu-item block text-black font-p4 py-2 px-4 rounded-lg ${
+                      activeLink("/unsere-rassezucht") ? "bg-[#EEE5DD]" : ""
+                    } hover:bg-white/30 transition-all duration-300`}
                   >
                     {content.linkBreed || "Unsere Rassezucht"}
                   </Link>
                   <a
                     href="#"
-                    className="mobile-menu-item block text-black text-lg py-3 px-4 rounded-lg hover:bg-white/30 transition-all duration-300 text-center"
+                    className={`mobile-menu-item block text-black font-p4 py-2 px-4 rounded-lg ${
+                      activeLink("#") ? "bg-[#EEE5DD]" : ""
+                    } hover:bg-white/30 transition-all duration-300`}
                   >
                     {content.linkWurf || "Wuif"}
                   </a>
                 </div>
 
-                <div className="mobile-menu-item mt-8 pt-6 border-t border-[#A89485] w-full max-w-[240px] text-center">
+                <div className="mobile-menu-item absolute bottom-2 pt-6 border-t border-[#A89485] w-full max-w-[240px] text-center">
                   {isLoggedIn ? (
                     <div className="text-black space-y-3">
                       <div className="flex items-center justify-center gap-2 mb-4">

@@ -66,6 +66,30 @@ export default function Home({ content, news, images }: Props) {
   const contentRef = useRef<HTMLElement>(null);
   const darkSectionRef = useRef<HTMLElement>(null);
   const newsRef = useRef<HTMLElement>(null);
+
+  function useWindowWidth(debounceTime = 200) {
+    const [width, setWidth] = useState(
+      typeof window !== "undefined" ? window.innerWidth : 0
+    );
+
+    useEffect(() => {
+      let timeoutId: NodeJS.Timeout;
+      const handleResize = () => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => setWidth(window.innerWidth), debounceTime);
+      };
+      window.addEventListener("resize", handleResize);
+      return () => {
+        clearTimeout(timeoutId);
+        window.removeEventListener("resize", handleResize);
+      };
+    }, [debounceTime]);
+
+    return width;
+  }
+
+  const width = useWindowWidth();
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (heroTextRef.current) {
@@ -217,7 +241,7 @@ export default function Home({ content, news, images }: Props) {
         }
       }
 
-      if (darkSectionRef.current) {
+      if (darkSectionRef.current && width > 720) {
         const darkText = darkSectionRef.current.querySelector(".dark-text");
         const darkImages =
           darkSectionRef.current.querySelectorAll(".dark-image");
@@ -465,20 +489,20 @@ export default function Home({ content, news, images }: Props) {
                   initialValue={content.whyBreedTitle || ""}
                   fieldName="whyBreedTitle"
                   isEditMode={isEditMode}
-                  className="text-xl md:text-2xl font-bold text-black"
+                  className="text-xl md:text-2xl max-sm:w-full max-sm:text-left font-bold text-black"
                   as="h4"
                 />
                 <EditableText
                   initialValue={content.whyBreedDescription || ""}
                   fieldName="whyBreedDescription"
                   isEditMode={isEditMode}
-                  className="text-black w-[50ch] text-sm font-p3 opacity-75"
+                  className="text-black w-[50ch] max-sm:w-full max-sm:text-left text-sm font-p3 opacity-75"
                   as="p"
                   multiline
                 />
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 max-w-md lg:max-w-none mx-auto">
+              <div className="grid grid-cols-2 max-sm:flex max-sm:flex-col mx-auto sm:grid-cols-3 gap-3 md:gap-4 max-w-md max-sm:w-full lg:max-w-none mx-auto">
                 <div className="feature-item flex items-center space-x-2">
                   <div className="size-8 md:size-10 flex justify-center items-center bg-[#F1D4BB]/25 rounded-full">
                     <Image
@@ -599,12 +623,12 @@ export default function Home({ content, news, images }: Props) {
         className=" py-12 md:py-16 bg-[#58483B] min-h-[400px] md:min-h-screen flex items-center parallax-section"
       >
         <div className=" section-container  relative mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div className="dark-text text-center w-[43ch] lg:text-left">
+          <div className="dark-text text-center w-[43ch] max-[720px]:w-full lg:text-left">
             <EditableText
               initialValue={content.darkSectionTitle || ""}
               fieldName="darkSectionTitle"
               isEditMode={isEditMode}
-              className="text-lg md:text-xl font-bold text-white mb-4"
+              className="text-lg max-[720px]:text-center   md:text-xl font-bold text-white mb-4"
               as="h3"
               multiline
             />
@@ -612,12 +636,12 @@ export default function Home({ content, news, images }: Props) {
               initialValue={content.darkSectionDescription || ""}
               fieldName="darkSectionDescription"
               isEditMode={isEditMode}
-              className="text-white mb-6 font-p4 w-[40ch] opacity-75 text-sm md:text-base"
+              className="text-white mb-6 font-p3 w-[40ch] max-[720px]:w-full opacity-75 text-sm md:text-base"
               as="p"
               multiline
             />
           </div>
-          <div className="grid grid-cols-2 right-0 absolute grid-rows-5 gap-3 md:gap-4 h-[350px] md:h-[475px] max-w-[561px] w-full ml-auto lg:mx-0">
+          <div className="grid grid-cols-2 right-0 max-lg:static lg:absolute grid-rows-5 gap-3 md:gap-4 h-[350px] md:h-[475px] max-w-[561px] w-full ml-auto lg:mx-0">
             <div className="dark-image relative h-full row-span-2">
               <EditableImage
                 initialSrc={images.darkSection1 || "/section-3.1.png"}
