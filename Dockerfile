@@ -17,8 +17,8 @@ ARG MONGODB_URI
 ARG NEXTAUTH_SECRET
 ARG NEXTAUTH_URL
 
-# Set environment variables for build (use dummy values if not provided)
-ENV MONGODB_URI=${MONGODB_URI:
+# Set environment variables for build
+ENV MONGODB_URI=$MONGODB_URI
 ENV NEXTAUTH_SECRET=$NEXTAUTH_SECRET
 ENV NEXTAUTH_URL=$NEXTAUTH_URL
 

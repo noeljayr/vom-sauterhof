@@ -502,7 +502,7 @@ export default function Home({ content, news, images }: Props) {
                 />
               </div>
 
-              <div className="grid grid-cols-2 max-sm:flex max-sm:flex-col mx-auto sm:grid-cols-3 gap-3 md:gap-4 max-w-md max-sm:w-full lg:max-w-none mx-auto">
+              <div className="grid  max-sm:grid-cols-2 max-[350px]:flex max-[350px]:flex-col mx-auto sm:grid-cols-3 gap-3 md:gap-4 max-w-md max-sm:w-full lg:max-w-none mx-auto">
                 <div className="feature-item flex items-center space-x-2">
                   <div className="size-8 md:size-10 flex justify-center items-center bg-[#F1D4BB]/25 rounded-full">
                     <Image
