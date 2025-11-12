@@ -6,6 +6,8 @@ import Parteners from "./Parteners";
 import { FooterContent } from "@/types/footer";
 import { usePathname, useSearchParams } from "next/navigation";
 import EditableTextFooter from "./EditableTextFooter";
+import Link from "next/link";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 type Props = {
   content: FooterContent;
@@ -16,6 +18,8 @@ export function FooterClient({ content }: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const isEditMode = searchParams.get("mode") === "edit";
+  const { userName, enabled, logout } = useAuthStore();
+  const isLoggedIn = enabled && userName;
 
   const addEditModeParam = (href: string) => {
     return isEditMode ? `${href}?mode=edit` : href;
@@ -62,16 +66,16 @@ export function FooterClient({ content }: Props) {
       <Parteners />
       <footer
         ref={footerRef}
-        className="px-4 py-10 mt-12 md:py-12 bg-[#BFA999D9]"
+        className="px-4 py-10 flex flex-col mt-12 md:py-12 bg-[#BFA999D9]"
       >
-        <div className="section-container mx-auto flex flex-col md:flex-row justify-between gap-10 md:gap-8 min-h-[200px]">
+        <div className="section-container pb-10 border-b border-b-[var(--c-border)] mx-auto flex flex-col md:flex-row justify-between gap-10 md:gap-8 min-h-[200px]">
           <div className="space-y-6 md:space-y-5 text-[#141414]">
-            <div>
+            <div className="flex flex-col">
               <EditableTextFooter
                 initialValue={content.companyName || "Familie Sauter"}
                 fieldName="companyName"
                 isEditMode={isEditMode}
-                className="font-bold mb-5 text-xl md:text-base"
+                className="font-bold w-fit mb-5 text-xl w-fit md:text-base"
                 as="h3"
               />
               <EditableTextFooter
@@ -90,7 +94,7 @@ export function FooterClient({ content }: Props) {
               />
             </div>
 
-            <div className="pt-3">
+            <div className="pt-3 flex flex-col">
               <EditableTextFooter
                 initialValue={content.phone || "079 770 49 24"}
                 fieldName="phone"
@@ -149,12 +153,12 @@ export function FooterClient({ content }: Props) {
               </li>
               <li>
                 <EditableTextFooter
-                  initialValue={content.linkBeauceron || "unsere Beauceron"}
+                  initialValue={content.linkBeauceron || "Unsere Beauceron"}
                   fieldName="linkBeauceron"
                   isEditMode={isEditMode}
                   className="hover:underline transition-all duration-300 block"
                   as="a"
-                  href={addEditModeParam("/unsere-rassezucht")}
+                  href={addEditModeParam("/unsere-beauceron")}
                 />
               </li>
               <li>
@@ -169,6 +173,32 @@ export function FooterClient({ content }: Props) {
               </li>
             </ul>
           </div>
+        </div>
+
+        <div className="flex items-center section-container mx-auto mt-5">
+          <Link
+            style={{
+              transition: "ease 0.5s",
+              fontSize: "calc(var(--p3) * 0.9)",
+            }}
+            href={"https://roxstein.ch/"}
+            target="_blank"
+            className="font-p4 hover:underline cursor-pointer hover:opacity-100 opacity-50 mr-auto "
+          >
+            Entwickelt von Roxstein
+          </Link>
+          {!isLoggedIn && (
+            <Link
+              style={{
+                transition: "ease 0.5s",
+                fontSize: "calc(var(--p3) * 0.9)",
+              }}
+              href={"/auth/login"}
+              className="py-1 px-4 font-medium border border-[var(--c-border)] bg-[#F38D3B] rounded-[0.35rem] h-[2rem] flex items-center justify-center"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </footer>
     </div>

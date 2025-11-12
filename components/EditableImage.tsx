@@ -130,14 +130,14 @@ export default function EditableImage({
                 className={`${className} opacity-70`}
               />
             )}
-            <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
+            <div className="absolute inset-0 z-[2] flex items-center justify-center bg-black/30 rounded-lg">
               <label
                 htmlFor={`file-${fieldName}`}
                 className="flex flex-col items-center gap-2 cursor-pointer bg-white/90 px-4 py-3 rounded-lg hover:bg-white transition-colors"
               >
                 <IconUpload className="h-6 w-6 text-[#58483B]" />
                 <span className="text-sm font-medium text-[#58483B]">
-                  Choose Image
+                  Wählen Sie Bild
                 </span>
               </label>
               <input
@@ -157,7 +157,7 @@ export default function EditableImage({
               className="flex items-center gap-2 bg-[#58483B] text-white px-3 py-1.5 rounded-md cursor-pointer hover:opacity-95 transition-opacity disabled:opacity-50 text-sm"
             >
               <IconCheck className="h-4 w-4" />
-              {isSaving ? "Saving..." : "Save"}
+              {isSaving ? "Sparen..." : "Speichern"}
             </button>
             <button
               onClick={handleCancel}
@@ -185,7 +185,7 @@ export default function EditableImage({
           {isHovered && (
             <button
               onClick={() => setIsEditing(true)}
-              className="absolute top-2 right-2 bg-[#58483B] text-white p-2 rounded-full hover:bg-[#6d5a4a] cursor-pointer transition-colors shadow-lg z-10"
+              className="absolute -top-2 -right-2 bg-[#58483B] text-white p-2 rounded-full hover:bg-[#6d5a4a] cursor-pointer transition-colors shadow-lg z-10"
               aria-label={`Edit ${alt}`}
             >
               <IconEdit size={18} />

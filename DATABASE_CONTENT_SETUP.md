@@ -6,12 +6,13 @@ All text content across the website is now stored in MongoDB instead of being ha
 
 ## Database Structure
 
-- **Database**: `session`
+- **Database**: `vom_sauterhof`
 - **Collections**:
   - `homepage` - Homepage text content
   - `navbar` - Navigation menu text
   - `footer` - Footer text content
   - `about` - About us page content
+  - `kontakt` - Contact page content
   - `banners` - Banner content for various pages
   - `newsPage` - News page UI text
 
@@ -43,6 +44,9 @@ curl -X POST http://localhost:3000/api/seed-footer
 
 # About page
 curl -X POST http://localhost:3000/api/seed-about
+
+# Kontakt page
+curl -X POST http://localhost:3000/api/seed-kontakt
 
 # Banners
 curl -X POST http://localhost:3000/api/seed-banners
@@ -77,13 +81,19 @@ Contains all text content for the "Über uns" (About Us) page.
 
 **Fields**: `bannerTitle`, `bannerDescription`, `welcomeHeading`, `welcomeText`, `homeHeading`, `homeText`, `breedingHeading`, `breedingText`, `packHeading`, `packText`, `finalText`
 
-### 5. Banners Collection
+### 5. Kontakt Collection
+
+Contains all text content for the "Kontakt" (Contact) page.
+
+**Fields**: `bannerTitle`, `bannerDescription`, `familyName`, `addressLine1`, `addressLine2`, `phone`, `email`, `availabilityTitle`, `availabilityText`
+
+### 6. Banners Collection
 
 Contains banner titles and descriptions for different pages.
 
 **Fields**: `page`, `title`, `description`
 
-### 6. News Page Collection
+### 7. News Page Collection
 
 Contains UI text for the news page.
 
@@ -102,8 +112,9 @@ Contains UI text for the news page.
 - ✅ Navbar (`components/navbar.tsx`)
 - ✅ Footer (`components/footer.tsx`)
 - ✅ About Us page (`app/uber-uns/page.tsx`)
+- ✅ Kontakt page (`app/kontakt/page.tsx` + `components/pages/KontaktClient.tsx`)
 - ✅ News page (`app/news/page.tsx` + `components/pages/NewsPageClient.tsx`)
-- ✅ Beauceron page (`app/unsere-rassezucht/page.tsx`)
+- ✅ Beauceron page (`app/unsere-beauceron/page.tsx`)
 - ✅ Banners (`components/Banner.tsx`)
 
 ## Updating Content

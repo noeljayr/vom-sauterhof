@@ -104,7 +104,7 @@ export default function LoginPage() {
                 style={{
                   fontSize: "calc(var(--p4) * 0.8)",
                 }}
-                className="bg-red-100 border border-red-400 text-red-700 px-4 flex items-center justify-center rounded-[0.5rem] h-[2rem]"
+                className="border border-red-400 text-red-700 px-4 flex items-center justify-center rounded-[0.5rem] h-[2rem]"
               >
                 {error}
               </div>

@@ -1,9 +1,16 @@
-import React from 'react'
+import Toolbar from "@/components/Toolbar";
+import BeauceronTable from "@/components/beauceron/BeauceronTable";
+import Documents from "@/components/beauceron/documents/Documents";
+import React from "react";
 
 function Page() {
   return (
-    <div>Page</div>
-  )
+    <>
+      <Toolbar />
+      <BeauceronTable />
+      <Documents />
+    </>
+  );
 }
 
-export default Page
+export default Page;

@@ -54,10 +54,10 @@ function DeleteModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={motionTransition()}
-          className="top-8 py-2 gap-4 bg-white w-[25rem] self-center rounded-[0.5rem] border border-black/10 fixed"
+          className="top-8 py-2 gap-4 bg-white w-[25rem] max-sm:w-[90%] self-center rounded-[0.5rem] border border-black/10 fixed"
         >
           <div className="flex items-center pb-2 border-b border-b-black/10 px-4">
-            <span className="font-medium">Delete selected news</span>
+            <span className="font-medium">Nachrichten löschen</span>
             <span
               onClick={() => setShowDelete(false)}
               style={{ transition: "ease 0.5s" }}
@@ -73,8 +73,8 @@ function DeleteModal({
               fontSize: "calc(var(--p4) * 0.9)",
             }}
           >
-            Are you sure you want to delete selected news
-            {ids.size == 1 ? " post" : " posts"}
+           
+            {ids.size == 1 ? "Möchten Sie den ausgewählten Beitrag wirklich löschen?" : " Sind Sie sicher, dass Sie die ausgewählten Beiträge löschen möchten?"}
           </p>
 
           <div className="px-4 flex w-full items-center pt-2 border-t border-t-black/10 ">
@@ -87,7 +87,7 @@ function DeleteModal({
               }}
               className={`py-1 px-2 bg-white hover:brightness-95 font-medium border border-[var(--c-border)]  rounded-[0.35rem] cursor-pointer ml-auto`}
             >
-              Cancel
+              Stornieren
             </button>
 
             <button
@@ -100,7 +100,7 @@ function DeleteModal({
               }}
               className={`py-1 px-2 bg-[#E61300] hover:brightness-95 font-medium border border-[var(--c-border)]  rounded-[0.35rem] cursor-pointer text-white ml-3 disabled:opacity-50 disabled:pointer-events-none`}
             >
-              Delete
+              Löschen
             </button>
           </div>
         </motion.div>

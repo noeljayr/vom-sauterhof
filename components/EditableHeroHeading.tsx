@@ -114,7 +114,7 @@ export default function EditableHeroHeading({
           {isHovered && (
             <button
               onClick={() => setIsEditing(true)}
-              className="absolute top-2 right-2 bg-[#58483B] text-white p-2 rounded-full hover:bg-[#6d5a4a] cursor-pointer transition-colors shadow-lg"
+              className="absolute -top-2 -right-2 bg-[#58483B] text-white p-2 rounded-full hover:bg-[#6d5a4a] cursor-pointer transition-colors shadow-lg"
               aria-label="Edit heading"
             >
               <IconEdit size={20} />

@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/formatDate";
 import { Beauceron } from "@/types/Beauceron";
 import { IconArrowUpRight } from "@tabler/icons-react";
 import Link from "next/link";
@@ -8,13 +9,26 @@ type Props = {
 };
 
 function BeauceronCard({ beauceron }: Props) {
+  const stripHtml = (html: string) => {
+    if (typeof window === "undefined") {
+      // Server-side: use regex to strip HTML tags
+      return html.replace(/<[^>]*>/g, "");
+    }
+    // Client-side: use DOM API
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
+
+  const plainTextContent = stripHtml(beauceron.description);
+
   return (
     <Link
-      href={`"/unsere-rassezucht/${beauceron.slug}`}
+      href={`unsere-beauceron/${beauceron.slug}`}
       className="flex relative flex-col overflow-hidden rounded-[1rem]"
     >
       <img
-        src={`/beauceron/${beauceron.image}`}
+        src={`${beauceron.image}`}
         className="aspect-[3.7_/_4] relative z-0 object-cover"
       />
 
@@ -40,7 +54,7 @@ function BeauceronCard({ beauceron }: Props) {
           style={{ fontSize: "calc(var(--p4) * 0.95)" }}
           className="text-white my-3.5 h-[6.5rem] line-clamp-5  opacity-75"
         >
-          {beauceron.descrtiption}
+          {plainTextContent}
         </span>
 
         <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center w-full">
@@ -51,7 +65,7 @@ function BeauceronCard({ beauceron }: Props) {
             >
               Geburtsdatum
             </span>
-            <span className="text-white font-p4">{beauceron.dob}</span>
+            <span className="text-white font-p4">{formatDate(beauceron.dob)}</span>
           </div>
           <span className="w-[1px] h-[50%] bg-[#675545] mx-4"></span>
           <div className="flex flex-col gap-1">

@@ -12,6 +12,7 @@ import { useSearchParams } from "next/navigation";
 import EditableHeroHeading from "@/components/EditableHeroHeading";
 import EditableText from "@/components/EditableText";
 import EditableImage from "@/components/EditableImage";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -372,7 +373,7 @@ export default function Home({ content, news, images }: Props) {
         />
         <section ref={heroRef} className="px-4 pt-6 md:pt-16 pb-32">
           <div className="section-container mx-auto grid md:flex gap-8 lg:gap-12 items-start w-full">
-            <div ref={heroTextRef} className="z-10 relative">
+            <div ref={heroTextRef} className="z-10 flex flex-col relative">
               <EditableHeroHeading
                 initialTitle={content.heroTitle || ""}
                 isEditMode={isEditMode}
@@ -381,11 +382,11 @@ export default function Home({ content, news, images }: Props) {
                 initialValue={content.heroDescription || ""}
                 fieldName="heroDescription"
                 isEditMode={isEditMode}
-                className="text-black text-base md:text-lg mb-6 md:w-2/3 lg:w-1/2 md:mb-8 leading-relaxed"
+                className="text-black text-base md:text-lg mb-6 w-[45ch] md:mb-8 leading-relaxed"
                 as="p"
                 multiline
               />
-              <Button className="text-white font-bold px-6 md:px-8 py-3 h-[41px] text-sm md:text-base rounded-md hover:opacity-90 bg-[#58483B] transition-all duration-300">
+              <Link href={'/kontakt'} className="text-white w-fit font-bold px-6 md:px-8 py-3 h-[3rem] text-sm md:text-base rounded-md hover:opacity-90 bg-[#58483B] transition-all duration-300">
                 <EditableText
                   initialValue={content.heroButtonText || ""}
                   fieldName="heroButtonText"
@@ -393,7 +394,7 @@ export default function Home({ content, news, images }: Props) {
                   className="text-white font-bold"
                   as="span"
                 />
-              </Button>
+              </Link>
             </div>
             <div
               ref={heroImageRef}
@@ -411,7 +412,7 @@ export default function Home({ content, news, images }: Props) {
         </section>
       </div>
 
-      {}
+     
       <section className="section-container py-12 pb-0 md:py-20 mx-auto parallax-section">
         <div
           ref={galleryRef}
@@ -453,7 +454,7 @@ export default function Home({ content, news, images }: Props) {
       {/* Content Section */}
       <section ref={contentRef} className="md:pt-12 pb-20 md:pb-28">
         <div className="section-container mx-auto text-center">
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center">
             <EditableText
               initialValue={content.contentHeading || ""}
               fieldName="contentHeading"
@@ -472,7 +473,7 @@ export default function Home({ content, news, images }: Props) {
           </div>
 
           <div className="content-card grid lg:grid-flow-col gap-8 lg:gap-[100px] justify-center items-center bg-[#fff]/25 rounded-[20px] md:rounded-[30px] py-8 md:py-16 w-full mx-auto max-w-6xl border border-[#BEA99A4D] md:px-16">
-            <div className="relative w-40 h-40 md:w-60 md:h-60 after:w-40 after:h-40 md:after:w-60 md:after:h-60 after:rounded-full after:border-[#C09877] after:border-2 md:after:border-3 after:absolute after:top-2 after:-left-2 after:z-[-1] mx-auto">
+            <div className="relative w-40 h-40 md:w-60 md:h-60 after:w-40 after:h-40 md:after:w-60 md:after:h-60 after:rounded-full after:border-[#C09877] after:border-2 md:after:border-3 after:absolute after:top-2 after:-left-2 after:z-[0] mx-auto">
               <EditableImage
                 initialSrc={images.whyBreedDog || "/why-breed-dogs.png"}
                 fieldName="whyBreedDog"
@@ -688,12 +689,12 @@ export default function Home({ content, news, images }: Props) {
 
       {/* News Section */}
       <section ref={newsRef} className=" py-12 md:py-20 ">
-        <div className="mx-auto">
+        <div className="mx-auto flex flex-col items-center">
           <EditableText
             initialValue={content.newsHeading || ""}
             fieldName="newsHeading"
             isEditMode={isEditMode}
-            className="text-2xl md:text-3xl font-bold text-black text-center mb-8 md:mb-12"
+            className="text-2xl md:text-3xl font-bold mx-auto text-black text-center mb-8 md:mb-12"
             as="h2"
           />
 

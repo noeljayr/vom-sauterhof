@@ -6,13 +6,17 @@ import "@/css/RichTextEditor.css";
 interface RichTextEditorProps {
   value?: string;
   onChange?: (html: string) => void;
-  onExport?: (html: string) => void;
+  style?: React.CSSProperties;
+  disableImageButton?: boolean;
+  placeholder?: string;
 }
 
 export default function RichTextEditor({
   value = "",
   onChange,
-  onExport,
+  style,
+  disableImageButton,
+  placeholder,
 }: RichTextEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -1181,28 +1185,33 @@ export default function RichTextEditor({
           </svg>
         </button>
 
-        <div className="divider"></div>
+        {!disableImageButton && (
+          <>
+            <div className="divider"></div>
 
-        <button onClick={triggerImageUpload} title="Insert image">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{ height: "1.35rem", width: "1.35rem" }}
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M15 8h.01" />
-            <path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12z" />
-            <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" />
-            <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" />
-          </svg>
-        </button>
+            <button onClick={triggerImageUpload} title="Insert image">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ height: "1.35rem", width: "1.35rem" }}
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M15 8h.01" />
+                <path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12z" />
+                <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" />
+                <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" />
+              </svg>
+            </button>
+          </>
+        )}
+
         <input
           ref={fileInputRef}
           type="file"
@@ -1212,33 +1221,40 @@ export default function RichTextEditor({
         />
       </div>
 
-      <div
-        ref={editorRef}
-        className={`editor ${isDragging ? "drag-over" : ""} ${
-          isCtrlPressed ? "ctrl-pressed" : ""
-        }`}
-        contentEditable="true"
-        spellCheck="true"
-        onInput={onInput}
-        onKeyDown={onKeyDown}
-        onKeyUp={onKeyUp}
-        onPaste={onPaste}
-        onClick={handleLinkClick}
-        onClickCapture={onEditorClick}
-        onMouseOver={handleLinkHover}
-        onMouseLeave={handleLinkLeave}
-        onBlur={onBlur}
-        onDragEnter={onDragEnter}
-        onDragOver={onDragOver}
-        onDragLeave={onDragLeave}
-        onDrop={onDrop}
-      ></div>
+      <div style={style} className="relative">
+        <div
+          ref={editorRef}
+          className={`editor relative z-[1] ${isDragging ? "drag-over" : ""} ${
+            isCtrlPressed ? "ctrl-pressed" : ""
+          }`}
+          contentEditable="true"
+          spellCheck="true"
+          onInput={onInput}
+          onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
+          onPaste={onPaste}
+          onClick={handleLinkClick}
+          onClickCapture={onEditorClick}
+          onMouseOver={handleLinkHover}
+          onMouseLeave={handleLinkLeave}
+          onBlur={onBlur}
+          onDragEnter={onDragEnter}
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
+        ></div>
+        {internalHtml.replace(/<[^>]*>/g, "").trim().length < 1 && (
+          <span className="opacity-50 pointer-events-none absolute top-0 left-0">
+            {placeholder ? placeholder : "Inhalt"}
+          </span>
+        )}
+      </div>
 
       {showLinkModal && (
         <div className="modal-overlay" onClick={closeLinkModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <span className="font-semibold">Insert Link</span>
+              <span className="font-semibold">Link einfügen</span>
               <button className="modal-close" onClick={closeLinkModal}>
                 &times;
               </button>
@@ -1252,18 +1268,18 @@ export default function RichTextEditor({
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
                   type="url"
-                  placeholder="https://example.com"
+                  placeholder="https://beispiel.ch"
                   onKeyUp={(e) => e.key === "Enter" && insertLink()}
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="linkText">Display Text (optional):</label>
+                <label htmlFor="linkText">Anzeigetext (optional):</label>
                 <input
                   id="linkText"
                   value={linkText}
                   onChange={(e) => setLinkText(e.target.value)}
                   type="text"
-                  placeholder="Link text"
+                  placeholder="Linktext"
                   onKeyUp={(e) => e.key === "Enter" && insertLink()}
                 />
               </div>
@@ -1278,7 +1294,7 @@ export default function RichTextEditor({
                 }}
                 className={`py-1 flex items-center px-2 bg-white hover:brightness-95 font-medium border border-[var(--c-border)]  rounded-[0.35rem] cursor-pointer`}
               >
-                Cancel
+                Stornieren
               </button>
 
               <button
@@ -1291,7 +1307,7 @@ export default function RichTextEditor({
                 }}
                 className={`py-1 px-2 bg-[#F38D3B] hover:brightness-95 font-medium border border-[var(--c-border)]  rounded-[0.35rem] cursor-pointer text-white ml-3`}
               >
-                Post
+                Speichern
               </button>
             </div>
           </div>

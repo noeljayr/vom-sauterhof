@@ -114,14 +114,14 @@ function NewsTable() {
             >
               <Link href={"/content/news/post"} className="flex items-center">
                 <IconPlus className="h-3 w-3 mr-1" />
-                New post
+               Neuer Beitrag
               </Link>
             </motion.button>
 
             <motion.div
               key={"tabler-header"}
               layout="position"
-              className="grid grid-cols-[2rem_4rem_1fr_15%_8rem_5rem] max-[1000px]:grid-cols-[2rem_4rem_1fr_8rem_5rem] gap-4 w-full items-center"
+              className="grid grid-cols-[2rem_4rem_1fr_15%_8rem_5rem] max-[1000px]:grid-cols-[2rem_4rem_1fr_8rem_2rem] max-sm:grid-cols-[1rem_4rem_1fr_3rem_2rem] max-[500px]:gap-2 gap-4 w-full items-center"
             >
               <span className="font-p4 font-medium">
                 <span
@@ -147,9 +147,9 @@ function NewsTable() {
                 </span>
               </span>
               <span></span>
-              <span className="font-p4 font-medium opacity-50">Title</span>
+              <span className="font-p4 font-medium opacity-50">Titel</span>
               <span className="font-p4 max-[1000px]:hidden font-medium opacity-50">
-                Posted on
+                Datum
               </span>
 
               <span className="font-p4 font-medium opacity-50">Status</span>
@@ -177,7 +177,7 @@ function NewsTable() {
                   onClick={() => setSelectedIds(new Set())}
                   className="py-1 hover:brightness-95 flex items-center w-fit rounded-[0.35rem] px-2 font-medium cursor-pointer border border-[rgba(0,_0,_0,_0.15)] bg-[#FDF9F6]"
                 >
-                  Cancel
+                  Stornieren
                 </button>
 
                 <button
@@ -188,7 +188,7 @@ function NewsTable() {
                   }}
                   className="py-1 hover:brightness-95 flex items-center w-fit rounded-[0.35rem] px-2 font-medium cursor-pointer border border-[rgba(0,_0,_0,_0.15)] bg-[#E6B100] text-white"
                 >
-                  Unpublish
+                  Verstecken
                 </button>
 
                 <button
@@ -202,7 +202,7 @@ function NewsTable() {
                   }}
                   className="py-1 hover:brightness-95 flex items-center w-fit rounded-[0.35rem] px-2 font-medium cursor-pointer border border-[rgba(0,_0,_0,_0.15)] bg-[#E61300] text-white"
                 >
-                  Delete
+                  Löschen
                 </button>
               </motion.div>
             )}
@@ -226,7 +226,7 @@ function NewsTable() {
                         : isActionActive
                         ? "bg-[#F5DFCC] z-[5]"
                         : "bg-[#F9ECE1] hover:brightness-95 z-[0]"
-                    }  grid font-p4 grid-cols-[2rem_4rem_1fr_15%_8rem_5rem] max-[1000px]:grid-cols-[2rem_4rem_1fr_8rem_5rem] pb-2 border-b border-b-black/5 gap-4 w-full items-center`}
+                    }  grid font-p4 grid-cols-[2rem_4rem_1fr_15%_8rem_5rem] max-[1000px]:grid-cols-[2rem_4rem_1fr_8rem_2rem] max-sm:grid-cols-[1rem_4rem_1fr_3rem_2rem] pb-2 border-b border-b-black/5 gap-4 max-[500px]:gap-2 w-full items-center`}
                   >
                     <span
                       onClick={() => toggleSelectRow(n.id)}
@@ -272,14 +272,14 @@ function NewsTable() {
                       href={`/content/news/edit/${n.id}`}
                       className="truncate font-medium cursor-pointer flex items-center h-14"
                     >
-                      {n.title}
+                     <span className="truncate"> {n.title}</span>
                     </Link>
                     <span className="truncate max-[1000px]:hidden cursor-pointer flex items-center h-14">
                       {n.date}
                     </span>
 
                     <span className={`capitalize font-semibold ${n.status}`}>
-                      {n.status}
+                      {n.status.toLowerCase() === "published" ? 'Veröffentlicht' : 'Entwurf' }
                     </span>
                     <span className="w-full flex items-center justify-center relative">
                       <span

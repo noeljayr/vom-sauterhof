@@ -3,8 +3,10 @@ export type Beauceron = {
   slug: string;
   name: string;
   image: string;
+  images: string[];
   dob: string;
   weight?: number;
   height?: number;
-  descrtiption: string;
+  description: string;
+  status: string;
 };

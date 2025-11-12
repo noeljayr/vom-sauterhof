@@ -42,6 +42,7 @@ export default function EditableTextFooter({
       if (response.ok) {
         setValue(tempValue);
         setIsEditing(false);
+        setIsHovered(false);
       } else {
         alert("Failed to save changes");
       }
@@ -56,6 +57,7 @@ export default function EditableTextFooter({
   const handleCancel = () => {
     setTempValue(value);
     setIsEditing(false);
+    setIsHovered(false);
   };
 
   if (!isEditMode) {
@@ -71,7 +73,7 @@ export default function EditableTextFooter({
 
   return (
     <div
-      className="relative group inline-block w-full"
+      className="relative group inline-block w-fit"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -104,7 +106,7 @@ export default function EditableTextFooter({
               className="flex items-center gap-2 bg-[#58483B] text-white px-3 py-1.5 rounded-[0.35rem] cursor-pointer hover:opacity-95 transition-opacity disabled:opacity-50"
             >
               <IconCheck className="h-4 w-4" />
-              {isSaving ? "Saving..." : "Save"}
+              {isSaving ? "Sparen..." : "Speichern"}
             </button>
             <button
               style={{
@@ -115,7 +117,7 @@ export default function EditableTextFooter({
               className="flex items-center gap-2 bg-gray-300 text-black px-3 py-1.5 rounded-[0.35rem] cursor-pointer hover:bg-gray-400 transition-colors disabled:opacity-50"
             >
               <IconX className="h-4 w-4" />
-              Cancel
+              Stornieren
             </button>
           </div>
         </div>

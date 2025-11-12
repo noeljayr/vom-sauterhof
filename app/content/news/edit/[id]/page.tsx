@@ -156,7 +156,7 @@ function Page() {
             className={`py-1 flex items-center px-2 bg-white hover:brightness-95 font-medium border border-[var(--c-border)]  rounded-[0.35rem] cursor-pointer`}
           >
             <IconArrowLeft className="h-4 w-4" />
-            Back
+            Zurück
           </Link>
 
           <button
@@ -169,8 +169,7 @@ function Page() {
             }}
             className="draft ml-auto py-1 px-2 hover:brightness-95 font-medium rounded-[0.35rem] cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
           >
-            
-            Save as draft
+            Als Entwurf speichern
           </button>
 
           <button
@@ -183,7 +182,7 @@ function Page() {
             }}
             className={`py-1 px-2 bg-[#F38D3B] hover:brightness-95 font-medium border border-[var(--c-border)]  rounded-[0.35rem] cursor-pointer text-white ml-3 disabled:opacity-50 disabled:pointer-events-none`}
           >
-            Update
+            Aktualisieren
           </button>
         </div>
 
@@ -208,7 +207,7 @@ function Page() {
                       : `/news/${coverImage}`
                   }
                   alt="Cover"
-                 className="h-fit w-full"
+                  className="h-fit w-full"
                 />
                 <button
                   type="button"
@@ -231,9 +230,7 @@ function Page() {
                   }}
                   className="font-medium opacity-50"
                 >
-                  {isDragging
-                    ? "Drop image here"
-                    : "Click or drag to upload cover image"}
+                  {isDragging ? "Coverbild:" : "Klicken/Ziehen zum Hochladen"}
                 </span>
               </>
             )}
@@ -248,7 +245,7 @@ function Page() {
 
           <input
             className="font-h3 font-bold placeholder:opacity-50 outline-0 border-0 bg-transparent"
-            placeholder="Title"
+            placeholder="Titel"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />

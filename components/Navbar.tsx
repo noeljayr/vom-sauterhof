@@ -2,15 +2,22 @@
 
 import { Button } from "@/components/ui/button";
 import { gsap } from "gsap";
-import { Menu, X, LogOut, User } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import logo from "@/public/logo.svg";
-import { IconChevronDown } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconChevronDown,
+  IconLogout,
+  IconNotes,
+} from "@tabler/icons-react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { NavbarContent } from "@/types/navbar";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { AnimatePresence, motion } from "motion/react";
+import { motionTransition } from "@/constants/motionTransition";
 
 type Props = {
   content: NavbarContent;
@@ -177,8 +184,8 @@ export function Navbar({ content }: Props) {
       href: "/news",
     },
     {
-      name: content.linkBreed || "Unsere Rassezucht",
-      href: "/unsere-rassezucht",
+      name: content.linkBreed || "Unsere beauceron",
+      href: "/unsere-beauceron",
     },
   ];
 
@@ -187,6 +194,23 @@ export function Navbar({ content }: Props) {
       return pathname === "/";
     }
     return pathname.startsWith(href);
+  };
+
+  const [editMode, setEditMode] = useState(isEditMode);
+  useEffect(() => {
+    setEditMode(isEditMode);
+  }, [isEditMode]);
+
+  const toggleEditMode = () => {
+    const newMode = !editMode;
+    setEditMode(newMode);
+    const url = new URL(window.location.href);
+    if (newMode) {
+      url.searchParams.set("mode", "edit");
+    } else {
+      url.searchParams.delete("mode");
+    }
+    router.push(url.pathname + url.search);
   };
 
   if (pathname.startsWith("/content") || pathname.startsWith("/auth")) {
@@ -206,7 +230,7 @@ export function Navbar({ content }: Props) {
           className="py-6 flex items-center justify-between"
         >
           <div className="section-container mx-auto grid grid-cols-[auto_auto] items-center justify-between">
-            <Link href={'/'} className="flex items-center justify-center">
+            <Link href={"/"} className="flex items-center justify-center">
               <Image
                 src={logo}
                 alt="Logo"
@@ -226,7 +250,7 @@ export function Navbar({ content }: Props) {
                     activeLink(link.href)
                       ? "bg-[#EEE5DD] border border-[#D5BEAA]"
                       : "bg-[#DBC6B3]"
-                  } hover:brightness-95 rounded-full cursor-pointer flex justify-center items-center leading-none transition-all duration-300`}
+                  } hover:brightness-[0.97] rounded-full cursor-pointer flex justify-center items-center leading-none transition-[filter,background-color] duration-150`}
                 >
                   {link.name}
                 </Link>
@@ -236,7 +260,7 @@ export function Navbar({ content }: Props) {
                   activeLink("wurf")
                     ? "bg-[#EEE5DD] border border-[#D5BEAA]"
                     : "bg-[#DBC6B3]"
-                } hover:brightness-95 rounded-full flex justify-center items-center leading-none transition-all duration-300`}
+                } hover:brightness-[0.97] rounded-full flex justify-center items-center leading-none transition-[filter,background-color] duration-150`}
               >
                 {content.linkWurf || "Wurf"}
                 <IconChevronDown className="h-4 w-4 ml-2 opacity-75" />
@@ -246,18 +270,19 @@ export function Navbar({ content }: Props) {
             <div className="flex flex-row-reverse items-center gap-3">
               <button
                 onClick={openMobileMenu}
-                className="lg:hidden p-2 text-black hover:bg-white/20 rounded-md transition-all duration-300"
+                className="lg:hidden p-2 text-black hover:bg-white/20 rounded-md transition-colors duration-150"
                 aria-label="Open menu"
               >
                 <Menu size={24} />
               </button>
 
-              <Button
-                className="text-white font-medium px-4 md:px-6 py-2 h-[35px] md:h-[41px] text-sm md:text-base rounded-md hover:opacity-90 transition-all duration-300"
+              <Link
+              href={'/kontakt'}
+                className="text-white font-medium px-4 md:px-6 py-2 h-[35px] md:h-[41px] text-sm md:text-base rounded-md hover:opacity-95 transition-opacity duration-150"
                 style={{ backgroundColor: "#58483B" }}
               >
                 {content.contactButton || "Kontaktieren"}
-              </Button>
+              </Link>
             </div>
           </div>
         </header>
@@ -283,7 +308,7 @@ export function Navbar({ content }: Props) {
                 />
                 <button
                   onClick={closeMobileMenu}
-                  className="p-2 text-black bg-[#EEE5DD] hover:bg-white/50 rounded-md transition-all duration-300"
+                  className="p-2 text-black bg-[#EEE5DD] hover:bg-white/50 rounded-md transition-colors duration-150"
                   aria-label="Close menu"
                 >
                   <X size={24} />
@@ -296,7 +321,7 @@ export function Navbar({ content }: Props) {
                     href={addEditModeParam("/")}
                     className={`mobile-menu-item block text-black font-medium font-p4 py-2 px-4 rounded-lg ${
                       activeLink("/") ? "bg-[#EEE5DD]" : ""
-                    }  hover:bg-white/50 transition-all duration-300`}
+                    }  hover:bg-white/50 transition-colors duration-150`}
                   >
                     {content.linkStart || "Start"}
                   </Link>
@@ -304,7 +329,7 @@ export function Navbar({ content }: Props) {
                     href={addEditModeParam("/uber-uns")}
                     className={`mobile-menu-item block text-black font-p4 py-2 px-4 rounded-lg ${
                       activeLink("/uber-uns") ? "bg-[#EEE5DD]" : ""
-                    } hover:bg-white/30 transition-all duration-300`}
+                    } hover:bg-white/30 transition-colors duration-150`}
                   >
                     {content.linkAbout || "Über uns"}
                   </Link>
@@ -312,59 +337,40 @@ export function Navbar({ content }: Props) {
                     href={addEditModeParam("/news")}
                     className={`mobile-menu-item block text-black font-p4 py-2 px-4 rounded-lg ${
                       activeLink("/news") ? "bg-[#EEE5DD]" : ""
-                    } hover:bg-white/30 transition-all duration-300`}
+                    } hover:bg-white/30 transition-colors duration-150`}
                   >
                     {content.linkNews || "News"}
                   </Link>
                   <Link
-                    href={addEditModeParam("/unsere-rassezucht")}
+                    href={addEditModeParam("/unsere-beauceron")}
                     className={`mobile-menu-item block text-black font-p4 py-2 px-4 rounded-lg ${
-                      activeLink("/unsere-rassezucht") ? "bg-[#EEE5DD]" : ""
-                    } hover:bg-white/30 transition-all duration-300`}
+                      activeLink("/unsere-beauceron") ? "bg-[#EEE5DD]" : ""
+                    } hover:bg-white/30 transition-colors duration-150`}
                   >
-                    {content.linkBreed || "Unsere Rassezucht"}
+                    {content.linkBreed || "Unsere beauceron"}
                   </Link>
                   <a
                     href="#"
                     className={`mobile-menu-item block text-black font-p4 py-2 px-4 rounded-lg ${
                       activeLink("#") ? "bg-[#EEE5DD]" : ""
-                    } hover:bg-white/30 transition-all duration-300`}
+                    } hover:bg-white/30 transition-colors duration-150`}
                   >
                     {content.linkWurf || "Wuif"}
                   </a>
                 </div>
 
                 <div className="mobile-menu-item absolute bottom-2 pt-6 border-t border-[#A89485] w-full max-w-[240px] text-center">
-                  {isLoggedIn ? (
-                    <div className="text-black space-y-3">
-                      <div className="flex items-center justify-center gap-2 mb-4">
-                        <User size={18} className="text-[#58483B]" />
-                        <span className="font-semibold text-lg">
-                          {userName}
-                        </span>
-                      </div>
-                      <Button
-                        onClick={handleLogout}
-                        className="w-full text-white font-medium py-3 rounded-lg hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2"
-                        style={{ backgroundColor: "#58483B" }}
-                      >
-                        <LogOut size={18} />
-                        Logout
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="text-black">
-                      <p className="font-semibold mb-3 text-lg">
-                        {content.mobileContactHeading || "Familie Sauter"}
-                      </p>
-                      <p className="text-sm mb-2">
-                        {content.mobilePhone || "079 770 49 24"}
-                      </p>
-                      <p className="text-sm">
-                        {content.mobileEmail || "h.sauter@sauterhof.ch"}
-                      </p>
-                    </div>
-                  )}
+                  <div className="text-black">
+                    <p className="font-semibold mb-3 text-lg">
+                      {content.mobileContactHeading || "Familie Sauter"}
+                    </p>
+                    <p className="text-sm mb-2">
+                      {content.mobilePhone || "079 770 49 24"}
+                    </p>
+                    <p className="text-sm">
+                      {content.mobileEmail || "h.sauter@sauterhof.ch"}
+                    </p>
+                  </div>
                 </div>
               </nav>
             </div>
@@ -373,14 +379,63 @@ export function Navbar({ content }: Props) {
       </div>
 
       {isLoggedIn && (
-        <div className="flex flex-col items-center gap-2 fixed bottom-8 right-8 z-[9999] ">
-          <button
-            onClick={handleLogout}
-            className="items-center gap-2 px-3 py-2 bg-[#F38D3B] text-white shadow-lg rounded-[0.5rem] border border-[var(--c-border)] flex opacity-70 cursor-pointer hover:opacity-100"
+        <div className="flex flex-col w-[9.5rem] items-center bg-white p-1.5 rounded-[0.75rem] shadow-lg gap-1.5 fixed bottom-8 right-8 z-[9999] ">
+          <div
+            onClick={toggleEditMode}
+            className="flex gap-2 w-full cursor-pointer items-center px-3 h-[2.5rem] border border-[var(--c-border)] font-p4 rounded-[0.5rem]"
           >
-            <LogOut size={16} />
-            <span className="hidden md:inline">Logout</span>
-          </button>
+            <span
+              style={{ transition: "ease 0.5s" }}
+              className={`relative w-[2.5rem] ${
+                editMode ? "bg-[#F38D3B]/20" : "bg-[#F38D3B]/5"
+              } flex p-0.5 px-0 border border-[var(--c-border)] rounded-full`}
+            >
+              <span
+                style={{ transition: "ease 0.5s" }}
+                className={`h-4 w-4 rounded-full relative flex items-center justify-center ${
+                  editMode
+                    ? "bg-[#F38D3B] left-[calc(100%_-_1.125rem)]"
+                    : "bg-black left-0.5"
+                }`}
+              >
+                {editMode && (
+                  <AnimatePresence>
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={motionTransition()}
+                    >
+                      <IconCheck color="white" className="h-3 w-3" />
+                    </motion.span>
+                  </AnimatePresence>
+                )}
+              </span>
+            </span>
+            <span
+              style={{ fontSize: "calc(var(--p3) * 0.9)" }}
+              className="opacity-70"
+            >
+              Bearbeiten
+            </span>
+          </div>
+
+          <Link
+            href={"/content/news"}
+            className="w-full items-center gap-2 px-3 h-[2.5rem] text-black font-p4 rounded-[0.5rem] border border-[var(--c-border)] flex opacity-70 cursor-pointer hover:opacity-100"
+          >
+            <IconNotes className="h-4.5 w-4.5" />
+            <span style={{ fontSize: "calc(var(--p3) * 0.9)" }} className="">
+              Admin-Panel
+            </span>
+          </Link>
+
+          <div
+            onClick={handleLogout}
+            className="w-full items-center gap-2 px-3 h-[2.5rem] text-black font-p4 rounded-[0.5rem] border border-[var(--c-border)] flex opacity-70 cursor-pointer hover:opacity-100"
+          >
+            <IconLogout className="h-4.5 w-4.5" />
+            <span className="">Abmelden</span>
+          </div>
         </div>
       )}
     </>
