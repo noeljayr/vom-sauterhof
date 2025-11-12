@@ -386,7 +386,7 @@ export default function Home({ content, news, images }: Props) {
                 as="p"
                 multiline
               />
-              <Link href={'/kontakt'} className="text-white w-fit font-bold px-6 md:px-8 py-3 h-[3rem] text-sm md:text-base rounded-md hover:opacity-90 bg-[#58483B] transition-all duration-300">
+              <a target="_blank" href={'mailto:ti.genoveva@bluewin.ch'} className="text-white w-fit font-bold px-6 md:px-8 py-3 h-[3rem] text-sm md:text-base rounded-md hover:opacity-90 bg-[#58483B] transition-all duration-300">
                 <EditableText
                   initialValue={content.heroButtonText || ""}
                   fieldName="heroButtonText"
@@ -394,7 +394,7 @@ export default function Home({ content, news, images }: Props) {
                   className="text-white font-bold"
                   as="span"
                 />
-              </Link>
+              </a>
             </div>
             <div
               ref={heroImageRef}

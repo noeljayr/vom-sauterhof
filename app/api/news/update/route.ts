@@ -15,7 +15,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, title, content, coverImage, status } = body;
+    const { id, title, content, coverImage, publishDate, status } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -37,6 +37,11 @@ export async function PUT(request: NextRequest) {
     if (content) updateData.content = content;
     if (coverImage !== undefined) updateData.coverImage = coverImage;
     if (status) updateData.status = status;
+
+    // Update date if provided (use ISO format YYYY-MM-DD)
+    if (publishDate !== undefined) {
+      updateData.date = publishDate || new Date().toISOString().split("T")[0];
+    }
 
     const result = await newsCollection.updateOne(
       { _id: new ObjectId(id) },

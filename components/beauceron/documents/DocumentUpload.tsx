@@ -6,9 +6,17 @@ import { IconFileUpload, IconTrash } from "@tabler/icons-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 
+type DeleteModalState = {
+  isOpen: boolean;
+  fileId: string;
+  filename: string;
+  onDeleteSuccess: () => void;
+} | null;
+
 type Props = {
   close: () => void;
   type: "stammbaum" | "arbeitsresultate" | "ausstellungsresultate" | "zucht";
+  setDeleteModalState: (state: DeleteModalState) => void;
 };
 
 type FileData = {
@@ -19,8 +27,9 @@ type FileData = {
   uploadedBy: string;
 };
 
-function DocumentUpload({ close, type }: Props) {
+function DocumentUpload({ close, type, setDeleteModalState }: Props) {
   const [loading, setLoading] = useState(false);
+  const [fetchingFile, setFetchingFile] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [existingFile, setExistingFile] = useState<FileData | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -35,6 +44,7 @@ function DocumentUpload({ close, type }: Props) {
   }, [beauceronId, type]);
 
   const fetchExistingFile = async () => {
+    setFetchingFile(true);
     try {
       const response = await fetch(
         `/api/beauceron/documents/get?beauceronId=${beauceronId}&type=${type}`
@@ -45,6 +55,8 @@ function DocumentUpload({ close, type }: Props) {
       }
     } catch (error) {
       console.error("Error fetching file:", error);
+    } finally {
+      setFetchingFile(false);
     }
   };
 
@@ -120,33 +132,16 @@ function DocumentUpload({ close, type }: Props) {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDeleteClick = () => {
     if (!existingFile) return;
-
-    if (!confirm("Möchten Sie dieses Dokument wirklich löschen?")) return;
-
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `/api/beauceron/documents/delete?fileId=${existingFile.id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      const data = await response.json();
-
-      if (data.success) {
+    setDeleteModalState({
+      isOpen: true,
+      fileId: existingFile.id,
+      filename: existingFile.filename,
+      onDeleteSuccess: () => {
         setExistingFile(null);
-      } else {
-        alert(data.message || "Löschen fehlgeschlagen");
-      }
-    } catch (error) {
-      console.error("Error deleting file:", error);
-      alert("Löschen fehlgeschlagen");
-    } finally {
-      setLoading(false);
-    }
+      },
+    });
   };
 
   const formatFileSize = (bytes: number) => {
@@ -167,15 +162,25 @@ function DocumentUpload({ close, type }: Props) {
   return (
     <>
       <div className="flex flex-col gap-4 px-4">
-        {existingFile ? (
+        {fetchingFile ? (
+          <div className="h-[15rem] w-full rounded-[0.5rem] mb-4 border border-dashed border-[var(--c-border)] flex flex-col items-center justify-center">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent mb-2"></div>
+            <span
+              style={{ fontSize: "calc(var(--p4) * 0.8)" }}
+              className="opacity-75"
+            >
+              Dokument wird geladen...
+            </span>
+          </div>
+        ) : existingFile ? (
           <div className="w-full p-2 rounded-[0.35rem] mb-4 border border-black/15">
             <div className="items-center grid grid-cols-[auto_1fr_auto] gap-1">
               <Image alt="pdf" src={pdf} className="h-6.5 w-6.5" />
               <div
-                className="flex flex-col ml-2 cursor-pointer"
+                className="flex flex-col ml-2 cursor-pointer min-w-0"
                 onClick={handleViewPDF}
               >
-                <span className="font-p4 hover:underline">
+                <span className="font-p4 hover:underline truncate">
                   {existingFile.filename}
                 </span>
                 <span
@@ -189,7 +194,7 @@ function DocumentUpload({ close, type }: Props) {
               </div>
               <button
                 className="cursor-pointer hover:text-red-600"
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
                 disabled={loading}
               >
                 <IconTrash className="h-5 w-5" />
@@ -200,8 +205,8 @@ function DocumentUpload({ close, type }: Props) {
           <div className="w-full p-2 rounded-[0.35rem] mb-4 border border-black/15">
             <div className="items-center grid grid-cols-[auto_1fr_auto] gap-1">
               <Image alt="pdf" src={pdf} className="h-6.5 w-6.5" />
-              <div className="flex flex-col ml-2">
-                <span className="font-p4">{file.name}</span>
+              <div className="flex flex-col ml-2 min-w-0">
+                <span className="font-p3 truncate">{file.name}</span>
                 <span
                   style={{
                     fontSize: "calc(var(--p4) * 0.7)",

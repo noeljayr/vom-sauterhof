@@ -6,12 +6,14 @@ import Link from "next/link";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
+import PublishDate from "@/components/news/PublishDate";
 
 function Page() {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [publishDate, setPublishDate] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,6 +36,7 @@ function Page() {
         setTitle(data.news.title);
         setContent(data.news.content);
         setCoverImage(data.news.coverImage || null);
+        setPublishDate(data.news.date);
       } else {
         alert(data.message || "Failed to fetch news");
         router.push("/content/news");
@@ -116,6 +119,7 @@ function Page() {
           title,
           content,
           coverImage: coverImage || "",
+          publishDate: publishDate || undefined,
           status,
         }),
       });
@@ -248,6 +252,13 @@ function Page() {
             placeholder="Titel"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center py-4 border-b border-b-black/10 gap-2">
+          <PublishDate
+            publishDate={publishDate}
+            setPublishDate={setPublishDate}
           />
         </div>
 

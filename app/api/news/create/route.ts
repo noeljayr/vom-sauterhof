@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, content, coverImage, status = "draft" } = body;
+    const { title, content, coverImage, publishDate, status = "draft" } = body;
 
     // Validation
     if (!title || !content) {
@@ -40,7 +40,9 @@ export async function POST(request: NextRequest) {
         .replace(/ü/g, "ue")
         .replace(/ß/g, "ss")
         .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "") + "-" +generateRandomIntString();
+        .replace(/^-+|-+$/g, "") +
+      "-" +
+      generateRandomIntString();
 
     // Connect to MongoDB
     const client = await clientPromise;
@@ -55,6 +57,9 @@ export async function POST(request: NextRequest) {
       finalSlug = `${slug}-${Date.now()}`;
     }
 
+    // Use publishDate if provided, otherwise use current date (in ISO format YYYY-MM-DD)
+    const dateISO = publishDate || new Date().toISOString().split("T")[0];
+
     // Create news document
     const newsDocument = {
       title,
@@ -64,11 +69,7 @@ export async function POST(request: NextRequest) {
       author: authResult.user.userName,
       status: status === "published" ? "published" : "draft",
       hasVideo: false,
-      date: new Date().toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }),
+      date: dateISO,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

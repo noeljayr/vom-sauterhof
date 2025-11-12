@@ -4,14 +4,16 @@ import RichTextEditor from "@/components/editor/RichTextEditor";
 import { IconArrowLeft, IconPhotoPlus, IconX } from "@tabler/icons-react";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
-import Image from "next/image";
+
 import { useRouter } from "next/navigation";
+import PublishDate from "@/components/news/PublishDate";
 
 function Page() {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [publishDate, setPublishDate] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -84,6 +86,7 @@ function Page() {
           title,
           content,
           coverImage: coverImage || "",
+          publishDate: publishDate || undefined,
           status,
         }),
       });
@@ -183,9 +186,7 @@ function Page() {
                   }}
                   className="font-medium opacity-50"
                 >
-                  {isDragging
-                    ? "Coverbild:"
-                    : "Klicken/Ziehen zum Hochladen"}
+                  {isDragging ? "Coverbild:" : "Klicken/Ziehen zum Hochladen"}
                 </span>
               </>
             )}
@@ -203,6 +204,13 @@ function Page() {
             placeholder="Titel"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center py-4 border-b border-b-black/10 gap-2">
+          <PublishDate
+            publishDate={publishDate}
+            setPublishDate={setPublishDate}
           />
         </div>
 

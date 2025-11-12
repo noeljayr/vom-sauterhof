@@ -8,6 +8,7 @@ import Link from "next/link";
 import type { News } from "@/types/News";
 import DeleteModal from "./DeleteModal";
 import NewsActions from "./NewsActions";
+import { formatDate2 } from "@/lib/formatDate";
 
 function NewsTable() {
   const [news, setNews] = useState<News[]>([]);
@@ -114,7 +115,7 @@ function NewsTable() {
             >
               <Link href={"/content/news/post"} className="flex items-center">
                 <IconPlus className="h-3 w-3 mr-1" />
-               Neuer Beitrag
+                Neuer Beitrag
               </Link>
             </motion.button>
 
@@ -272,14 +273,16 @@ function NewsTable() {
                       href={`/content/news/edit/${n.id}`}
                       className="truncate font-medium cursor-pointer flex items-center h-14"
                     >
-                     <span className="truncate"> {n.title}</span>
+                      <span className="truncate"> {n.title}</span>
                     </Link>
                     <span className="truncate max-[1000px]:hidden cursor-pointer flex items-center h-14">
-                      {n.date}
+                      {formatDate2(n.date)}
                     </span>
 
                     <span className={`capitalize font-semibold ${n.status}`}>
-                      {n.status.toLowerCase() === "published" ? 'Veröffentlicht' : 'Entwurf' }
+                      {n.status.toLowerCase() === "published"
+                        ? "Veröffentlicht"
+                        : "Entwurf"}
                     </span>
                     <span className="w-full flex items-center justify-center relative">
                       <span

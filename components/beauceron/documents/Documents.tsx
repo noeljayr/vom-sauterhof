@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import Arbeitsresultate from "./Arbeitsresultate";
 import Ausstellungsresultate from "./Ausstellungsresultate";
 import Zucht from "./Zucht";
+import DeleteDocumentModal from "./DeleteDocumentModal";
 
 const tabs = [
   "stammbaum",
@@ -16,10 +17,19 @@ const tabs = [
   "zucht",
 ];
 
+type DeleteModalState = {
+  isOpen: boolean;
+  fileId: string;
+  filename: string;
+  onDeleteSuccess: () => void;
+} | null;
+
 function Documents() {
   const { isOpen: open } = useUrlModal("beauceron-documents");
   const [activeTab, setActiveTab] = useState("");
   const [beauceronName, setBeauceronName] = useState("");
+  const [deleteModalState, setDeleteModalState] =
+    useState<DeleteModalState>(null);
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
   const beauceronId = searchParams.get("id");
@@ -59,7 +69,13 @@ function Documents() {
         <>
           <div className="flex fixed z-10 w-screen h-screen top-0 left-0 bg-black opacity-20"></div>
 
-          <div className="top-8 py-2 gap-4 bg-white w-[40rem] max-sm:w-[90%] self-center rounded-[0.5rem] border border-black/10 fixed z-10">
+          <div
+            className="top-8 py-2 gap-4 bg-white w-[40rem] max-sm:w-[90%] self-center rounded-[0.5rem] border border-black/10 fixed z-10"
+            style={{
+              opacity: deleteModalState?.isOpen ? 0 : 1,
+              transition: "opacity 0.3s ease",
+            }}
+          >
             <div
               key={"title"}
               className="grid grid-cols-[1fr_auto] gap-4 items-center pb-2 border-b border-b-black/10 px-4"
@@ -76,9 +92,13 @@ function Documents() {
               </span>
             </div>
 
-            <div key={"tabs"} className="flex gap-2 my-4 px-4">
+            <div
+              key={"tabs"}
+              className="flex max-sm:grid max-sm:grid-cols-2 gap-2 my-4 px-4"
+            >
               {tabs.map((t) => (
                 <button
+                  key={t}
                   onClick={() => setActiveTab(t)}
                   style={{
                     transition: "ease 0.5s",
@@ -95,22 +115,46 @@ function Documents() {
               ))}
             </div>
             {activeTab.toLowerCase() == "stammbaum" && (
-              <Stammbaum key={"stammbaum"} close={close} />
+              <Stammbaum
+                key={"stammbaum"}
+                close={close}
+                setDeleteModalState={setDeleteModalState}
+              />
             )}
             {activeTab.toLowerCase() == "arbeitsresultate" && (
-              <Arbeitsresultate key={"arbeitsresultate"} close={close} />
+              <Arbeitsresultate
+                key={"arbeitsresultate"}
+                close={close}
+                setDeleteModalState={setDeleteModalState}
+              />
             )}
             {activeTab.toLowerCase() == "ausstellungsresultate" && (
               <Ausstellungsresultate
                 key={"ausstellungsresultate"}
                 close={close}
+                setDeleteModalState={setDeleteModalState}
               />
             )}
             {activeTab.toLowerCase() == "zucht" && (
-              <Zucht key={"zucht"} close={close} />
+              <Zucht
+                key={"zucht"}
+                close={close}
+                setDeleteModalState={setDeleteModalState}
+              />
             )}
           </div>
         </>
+      )}
+
+      {deleteModalState?.isOpen && (
+        <DeleteDocumentModal
+          fileId={deleteModalState.fileId}
+          filename={deleteModalState.filename}
+          onDeleteSuccess={deleteModalState.onDeleteSuccess}
+          setShowDelete={(isOpen) =>
+            setDeleteModalState(isOpen ? deleteModalState : null)
+          }
+        />
       )}
     </>
   );

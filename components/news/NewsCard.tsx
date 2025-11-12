@@ -6,6 +6,7 @@ import Link from "next/link";
 
 import { News } from "@/types/News";
 import { ArrowRight } from "lucide-react";
+import { formatDate2 } from "@/lib/formatDate";
 
 type Props = {
   news: News;
@@ -44,7 +45,7 @@ function NewsCard({ news, color }: Props) {
               }}
               className={`ml-2 font-p4`}
             >
-              {news.date}
+              {formatDate2(news.date)}
             </span>
           </div>
 

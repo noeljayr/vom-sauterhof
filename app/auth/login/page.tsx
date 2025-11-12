@@ -91,10 +91,12 @@ export default function LoginPage() {
               />
             </div>
 
+            
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#000] rounded-[0.5rem] h-[2.5rem] text-white font-medium font-p4 hover:opacity-90 flex items-center justify-center cursor-pointer transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#58483B] rounded-[0.5rem] h-[2.5rem] text-white font-medium font-p4 hover:opacity-90 flex items-center justify-center cursor-pointer transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Anmelden..." : "Login"}
             </button>

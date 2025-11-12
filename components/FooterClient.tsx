@@ -192,9 +192,10 @@ export function FooterClient({ content }: Props) {
               style={{
                 transition: "ease 0.5s",
                 fontSize: "calc(var(--p3) * 0.9)",
+                backgroundColor: "#58483B",
               }}
               href={"/auth/login"}
-              className="py-1 px-4 font-medium border border-[var(--c-border)] bg-[#F38D3B] rounded-[0.35rem] h-[2rem] flex items-center justify-center"
+              className="text-white font-medium px-4 md:px-6 py-2 h-[35px] md:h-[41px] text-sm md:text-base rounded-md hover:opacity-95 transition-opacity duration-150 flex items-center"
             >
               Login
             </Link>

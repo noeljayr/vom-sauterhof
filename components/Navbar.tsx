@@ -276,13 +276,14 @@ export function Navbar({ content }: Props) {
                 <Menu size={24} />
               </button>
 
-              <Link
-              href={'/kontakt'}
+              <a
+                target="_blank"
+                href={"mailto:ti.genoveva@bluewin.ch"}
                 className="text-white font-medium px-4 md:px-6 py-2 h-[35px] md:h-[41px] text-sm md:text-base rounded-md hover:opacity-95 transition-opacity duration-150"
                 style={{ backgroundColor: "#58483B" }}
               >
                 {content.contactButton || "Kontaktieren"}
-              </Link>
+              </a>
             </div>
           </div>
         </header>
